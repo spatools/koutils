@@ -1,0 +1,37 @@
+{
+  "name": "koutils",
+  "version": "0.1.0",
+  "authors": [
+    "SPA Tools"
+  ],
+  "description": "Knockout Utilities Extensions to simplify Knockout app development",
+  "main": "dist/koutils.js",
+  "keywords": [
+    "knockout",
+    "knockoutjs",
+    "ko",
+    "changeTracker",
+    "utilities",
+    "javascript",
+    "utils",
+    "spatools",
+    "amd"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/spatools/koutils",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "typings",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.10"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1",
+    "should": "3.1.2",
+    "sinon": "http://sinonjs.org/releases/sinon-1.8.1.js"
+  }
+}
