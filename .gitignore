@@ -7,6 +7,16 @@
 *.sln.docstates
 *.sln
 
+# Keep only ts file in src folder
+src/*.js
+src/*.js.map
+tests/*.js
+tests/*.js.map
+tests/helpers/*.d.ts
+tests/helpers/*.js
+tests/helpers/*.js.map
+nuget/*.nupkg
+
 # Build results
 
 [Dd]ebug/
