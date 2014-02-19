@@ -1,5 +1,7 @@
 ﻿/// <reference path="../../_definitions.d.ts" />
 
+import ko = require("knockout");
+
 export interface Note {
     title: KnockoutObservable<string>;
     date: KnockoutObservable<number>;
