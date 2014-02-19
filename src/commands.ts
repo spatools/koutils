@@ -33,7 +33,7 @@ export class Command {
         }, this);
     }
 
-    public execute($data: any): void {
+    public execute($data?: any): void {
         if (this.canExecute() === true)
             this.executeCallback.call(this.context, $data);
     }
@@ -61,7 +61,7 @@ export class AsyncCommand {
         this.isExecuting(false);
     }
 
-    public execute($data: any): void {
+    public execute($data?: any): void {
         if (this.canExecute() === true) {
             var args = [];
 
