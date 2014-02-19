@@ -27,7 +27,9 @@
     "tests"
   ],
   "dependencies": {
-    "requirejs": "~2.1.10"
+    "requirejs": "~2.1.10",
+    "underscore": "~1.6.0",
+    "knockout.js": "~3.0.0"
   },
   "devDependencies": {
     "mocha": "~1.17.1",
