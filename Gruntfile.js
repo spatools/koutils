@@ -10,7 +10,8 @@ module.exports = function (grunt) {
 
     // Define the configuration for all the tasks
     grunt.initConfig({
-        // Configurable paths
+
+        pkg: grunt.file.readJSON("package.json"),
         paths: {
             src: 'src',
             build: 'dist',
@@ -130,6 +131,22 @@ module.exports = function (grunt) {
             ]
         },
 
+        nugetpack: {
+            all: {
+                src: "nuget/*.nuspec",
+                dest: "nuget/",
+
+                options: {
+                    version: "<%= pkg.version %>"
+                }
+            }
+        },
+        nugetpush: {
+            all: {
+                src: "nuget/*.<%= pkg.version %>.nupkg"
+            }
+        },
+
         watch: {
             tslint: {
                 files: ['<%= tslint.dev.src %>'],
@@ -153,6 +170,7 @@ module.exports = function (grunt) {
     grunt.registerTask("build", ["tslint:dev", "typescript:dist", "jshint:dist", "declaration"]);
     grunt.registerTask("dev", ["tslint:dev", "typescript:dev", "jshint:dev"]);
     grunt.registerTask("test", ["dev", "tslint:test", "typescript:test", "jshint:test", "mocha:test", "clean"]);
+    grunt.registerTask("nuget", ["nugetpack", "nugetpush"]);
 
     grunt.registerTask("default", ["clean", "test", "build"]);
 };

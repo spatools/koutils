@@ -1,4 +1,4 @@
-﻿# KoUtils [![Build Status](https://travis-ci.org/spatools/koutils.png)](https://travis-ci.org/spatools/koutils) [![Bower version](https://badge.fury.io/bo/koutils.png)](http://badge.fury.io/bo/koutils)
+﻿# KoUtils [![Build Status](https://travis-ci.org/spatools/koutils.png)](https://travis-ci.org/spatools/koutils) [![Bower version](https://badge.fury.io/bo/koutils.png)](http://badge.fury.io/bo/koutils) [![NuGet version](https://badge.fury.io/nu/koutils.png)](http://badge.fury.io/nu/koutils)
 
 Knockout Utilities Extensions to simplify Knockout app development.
 
@@ -18,17 +18,7 @@ $ Install-Package KoUtils
 
 ## Usage
 
-You could use geomath in different context.
-
-### Browser (with built file)
-
-Include built script in your HTML file.
-
-```html
-<script type="text/javascript" src="path/to/knockout.js"></script>
-<script type="text/javascript" src="path/to/underscore.js"></script>
-<script type="text/javascript" src="path/to/koutils.min.js"></script>
-```
+You could use koutils in different context.
 
 ### Browser (AMD from source)
 
@@ -57,6 +47,16 @@ define(["koutils/changetracker"], function(changeTracker) {
 
     tracker.hasChanges(); // true
 });
+```
+
+### Browser (with built file)
+
+Include built script in your HTML file.
+
+```html
+<script type="text/javascript" src="path/to/knockout.js"></script>
+<script type="text/javascript" src="path/to/underscore.js"></script>
+<script type="text/javascript" src="path/to/koutils.min.js"></script>
 ```
 
 ## Documentation
