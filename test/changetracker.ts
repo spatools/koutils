@@ -4,7 +4,7 @@
 /// <reference path="../typings/sinon/sinon.d.ts" />
 
 import ko = require("knockout");
-import changeTracker = require("../src/changeTracker");
+import changeTracker = require("../src/changetracker");
 import commonHelpers = require("./helpers/common");
 
 describe("ChangeTracker", () => {
