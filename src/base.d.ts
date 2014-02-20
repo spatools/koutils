@@ -1,4 +1,5 @@
 ﻿/// <reference path="../typings/knockout/knockout.d.ts" />
+/// <reference path="../typings/knockout.validation/knockout.validation.d.ts" />
 /// <reference path="../typings/underscore/underscore.d.ts" />
 
 interface UnderscoreStatic {
@@ -107,4 +108,13 @@ interface KnockoutUnderscoreObjectsFunctions<T> {
 interface KnockoutObservableArrayFunctions<T> extends KnockoutUnderscoreArrayFunctions<T> {
     indexOf(value: T, isSorted?: boolean): number;
     lastIndexOf(value: T, from?: number): number;
+}
+
+interface KnockoutExtenders {
+    moment: (target: any, options: Object) => any;
+    momentDuration: (target: any, options: any) => any;
+    delay: (target: any, delay: number) => any;
+    cnotify: (target: any, notifyWhen: any) => any;
+    cthrottle: (target: any, timeout: number) => any;
+    //notify: (target: any, notifyWhen: string, customEqualityComparer: (v1: any, v2: any) => number) => any;
 }
