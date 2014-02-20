@@ -28,7 +28,6 @@ requirejs.config({
 
 var tests = [
     "changetracker",
-    "commands",
     "utils"
 ];
 
