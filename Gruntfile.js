@@ -37,12 +37,42 @@ module.exports = function (grunt) {
             test: {
                 src: "<%= paths.test %>/**/*.ts"
             },
+            declaration: {
+                src: "<%= paths.src %>/**/*.ts",
+                dest: "<%= paths.temp %>/",
+                options: {
+                    base_path: '<%= paths.src %>',
+                    declaration: true
+                }
+            },
             dist: {
                 src: "<%= paths.src %>/**/*.ts",
                 dest: "<%= paths.build %>/",
                 options: {
                     base_path: '<%= paths.src %>'
                 }
+            }
+        },
+
+        concat: {
+            declaration: {
+                src: [
+                    "<%= paths.src %>/base.d.ts",
+                    "<%= paths.temp %>/temp.d.ts"
+                ],
+                dest: "<%= paths.build %>/koutils.d.ts"
+            }
+        },
+
+        tsdamdconcat: {
+            options: {
+                removeReferences: true,
+                basePath: "<%= paths.temp %>",
+                prefixPath: "koutils"
+            },
+            declaration: {
+                src: "<%= paths.temp %>/*.d.ts",
+                dest: "<%= paths.temp %>/temp.d.ts"
             }
         },
 
@@ -86,7 +116,7 @@ module.exports = function (grunt) {
         clean: {
             dev: [
                 "<%= paths.src %>/**/*.d.ts",
-                "!<%= paths.src %>/math.d.ts",
+                "!<%= paths.src %>/base.d.ts",
                 "<%= paths.src %>/**/*.js",
                 "<%= paths.src %>/**/*.js.map"
             ],
@@ -95,6 +125,9 @@ module.exports = function (grunt) {
                 "<%= paths.test %>/**/*.js",
                 "<%= paths.test %>/**/*.js.map"
             ],
+            temp: [
+                "<%= paths.temp %>/**/*.*"
+            ]
         },
 
         watch: {
@@ -116,9 +149,10 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask("build", ["tslint:dev", "typescript:dist", "jshint:dist"]);
+    grunt.registerTask("declaration", ["typescript:declaration", "tsdamdconcat:declaration", "concat:declaration", "clean:temp"]);
+    grunt.registerTask("build", ["tslint:dev", "typescript:dist", "jshint:dist", "declaration"]);
     grunt.registerTask("dev", ["tslint:dev", "typescript:dev", "jshint:dev"]);
-    grunt.registerTask("test", ["dev", "tslint:test", "typescript:test", "jshint:test", "mocha:test"]);
+    grunt.registerTask("test", ["dev", "tslint:test", "typescript:test", "jshint:test", "mocha:test", "clean"]);
 
     grunt.registerTask("default", ["clean", "test", "build"]);
 };
