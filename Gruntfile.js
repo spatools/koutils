@@ -166,7 +166,13 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask("declaration", ["typescript:declaration", "tsdamdconcat:declaration", "concat:declaration", "clean:temp"]);
+    grunt.registerTask("fixdecla", function () {
+        var content = grunt.file.read("dist/koutils.d.ts");
+        content = content.replace(/\.{2}\/typings/g, "../../../typings");
+        grunt.file.write("dist/koutils.d.ts", content);
+    });
+
+    grunt.registerTask("declaration", ["typescript:declaration", "tsdamdconcat:declaration", "concat:declaration", "fixdecla", "clean:temp"]);
     grunt.registerTask("build", ["tslint:dev", "typescript:dist", "jshint:dist", "declaration"]);
     grunt.registerTask("dev", ["tslint:dev", "typescript:dev", "jshint:dev"]);
     grunt.registerTask("test", ["dev", "tslint:test", "typescript:test", "jshint:test", "mocha:test", "clean"]);
