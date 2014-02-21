@@ -23,8 +23,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "typings",
-    "tests"
+    "test"
   ],
   "dependencies": {
     "requirejs": "~2.1.10",
