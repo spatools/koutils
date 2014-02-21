@@ -1,5 +1,7 @@
 /// <reference path="../_definitions.d.ts" />
 
+import ko = require("knockout");
+
 //#region UndescoreJS Extension
 
 var p = Array.prototype;

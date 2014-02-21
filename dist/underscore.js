@@ -1,4 +1,4 @@
-define(["require", "exports"], function(require, exports) {
+define(["require", "exports", "knockout"], function(require, exports, ko) {
     var p = Array.prototype;
 
     _.mixin({
