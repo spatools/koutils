@@ -61,4 +61,5 @@ Include built script in your HTML file.
 
 ## Documentation
 
-For now documentation can be found in code.
+Documentation is hosted on 
+[Ko Utils Github Wiki](https://github.com/spatools/koutils/wiki)
