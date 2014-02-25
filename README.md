@@ -62,4 +62,4 @@ Include built script in your HTML file.
 ## Documentation
 
 Documentation is hosted on 
-[Ko Utils Github Wiki](https://github.com/spatools/koutils/wiki)
+[Github Wiki](https://github.com/spatools/koutils/wiki)
