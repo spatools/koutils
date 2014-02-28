@@ -58,6 +58,52 @@ define(["require", "exports", "knockout", "underscore", "moment"], function(requ
     }
     exports.getMomentDuration = getMomentDuration;
 
+    ko.bindingHandlers.date = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var value = valueAccessor(), options = ko.unwrap(value);
+
+            if (_.isObject(options))
+                value = options.value;
+            else
+                options = {};
+
+            var format = ko.unwrap(options.format), utc = ko.unwrap(options.utc || false), unix = ko.unwrap(options.unix || false), attr = ko.unwrap(options.attr || "text");
+
+            if (ko.isWriteableObservable(value) && attr === "value") {
+                element.addEventListener("change", function (event) {
+                    var moment = exports.getMoment(element.value, unix, utc, format);
+                    value(exports.dateToString(moment, unix, utc, ""));
+                }, false);
+            }
+        },
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var value = valueAccessor(), options = ko.unwrap(value);
+
+            if (_.isObject(options))
+                value = options.value;
+            else
+                options = {};
+
+            var format = ko.unwrap(options.format), utc = ko.unwrap(options.utc || false), unix = ko.unwrap(options.unix || false), attr = ko.unwrap(options.attr || "text");
+
+            if (value && ko.unwrap(value)) {
+                var _moment = (value.date && moment.isMoment(value.date)) ? value.date : exports.getMoment(ko.unwrap(value), unix, utc, format), text = exports.dateToString(_moment, unix, utc, format);
+
+                switch (attr) {
+                    case "value":
+                        element.value = text;
+                        break;
+                    case "text":
+                        element.innerText = text;
+                        break;
+                    default:
+                        element[attr] = text;
+                        break;
+                }
+            }
+        }
+    };
+
     ko.extenders.moment = function (target, options) {
         var opts = { format: null, unix: false, utc: false };
         opts = _.extend(opts, options || {});

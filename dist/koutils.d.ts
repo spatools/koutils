@@ -120,6 +120,10 @@ interface KnockoutExtenders {
     //notify: (target: any, notifyWhen: string, customEqualityComparer: (v1: any, v2: any) => number) => any;
 }
 
+interface KnockoutBindingHandlers {
+    date: KnockoutBindingHandler;
+}
+
 declare module "koutils/changetracker" {
 class ChangeTracker {
     private hashFunction;
