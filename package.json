@@ -5,7 +5,7 @@
   "main": "dist/koutils.js",
   "scripts": {
 	"install": "bower install && tsd reinstall",
-    "test": "grunt"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
