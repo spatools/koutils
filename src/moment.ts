@@ -70,6 +70,61 @@ export function getMomentDuration(timeSpan: string): Duration {
         return moment.duration(options);
 }
 
+ko.bindingHandlers.date = {
+    init: function (element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext) {
+        var value = valueAccessor(),
+            options = ko.unwrap(value);
+
+        if (_.isObject(options))
+            value = options.value;
+        else
+            options = {};
+
+        var format = ko.unwrap(options.format),
+            utc = ko.unwrap(options.utc || false),
+            unix = ko.unwrap(options.unix || false),
+            attr = ko.unwrap(options.attr || "text");
+
+        if (ko.isWriteableObservable(value) && attr === "value") {
+            element.addEventListener("change", function (event) {
+                var moment = getMoment((<HTMLInputElement>element).value, unix, utc, format);
+                value(dateToString(moment, unix, utc, ""));
+            }, false);
+        }
+    },
+    update: function (element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext) {
+        var value = valueAccessor(),
+            options = ko.unwrap(value);
+
+        if (_.isObject(options))
+            value = options.value;
+        else
+            options = {};
+
+        var format = ko.unwrap(options.format),
+            utc = ko.unwrap(options.utc || false),
+            unix = ko.unwrap(options.unix || false),
+            attr = ko.unwrap(options.attr || "text");
+
+        if (value && ko.unwrap(value)) {
+            var _moment = (value.date && moment.isMoment(value.date)) ? value.date : getMoment(ko.unwrap(value), unix, utc, format),
+                text = dateToString(_moment, unix, utc, format);
+
+            switch (attr) {
+                case "value":
+                    (<HTMLInputElement>element).value = text;
+                    break;
+                case "text":
+                    element.innerText = text;
+                    break;
+                default:
+                    element[attr] = text;
+                    break;
+            }
+        }
+    }
+};
+
 ko.extenders.moment = function (target: any, options: Object): any {
     var opts: MomentExtenderOptions = { format: null, unix: false, utc: false };
     opts = _.extend(opts, options || {});

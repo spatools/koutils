@@ -119,3 +119,7 @@ interface KnockoutExtenders {
     cthrottle: (target: any, timeout: number) => any;
     //notify: (target: any, notifyWhen: string, customEqualityComparer: (v1: any, v2: any) => number) => any;
 }
+
+interface KnockoutBindingHandlers {
+    date: KnockoutBindingHandler;
+}
