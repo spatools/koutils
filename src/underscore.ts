@@ -1,6 +1,7 @@
 /// <reference path="../_definitions.d.ts" />
 
 import ko = require("knockout");
+import _ = require("underscore");
 
 //#region UndescoreJS Extension
 
