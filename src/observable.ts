@@ -1,5 +1,4 @@
 ﻿/// <reference path="../_definitions.d.ts" />
-/// <reference path="../typings/knockout.validation/knockout.validation.d.ts" />
 /// <amd-dependency path="./underscore" />
 
 import ko = require("knockout");
@@ -50,7 +49,7 @@ function historyObservable<T>(initialValue: T): KnockoutHistoryObservable<T> {
 
             return values[index];
         },
-        write: value => {
+        write: (value: any) => {
             var index = self.selectedIndex();
             if (value !== self.latestValues()[index]) {
                 if (index !== self.latestValues.size() - 1) {
@@ -104,19 +103,30 @@ export var history: KnockoutHistoryObservableStatic = _.extend(historyObservable
 //#endregion
 
 //#region Validated Observable
+export interface KnockoutValidatedRule {
+    rule: string;
+    params: any;
+    message?: string;
+    condition?: () => boolean;
+}
+
+export interface KnockoutValidatedErrors {
+    (): string[];
+    showAllMessages(): void;
+    showAllMessages(show: boolean): void;
+}
 
 export interface KnockoutValidatedObservable<T> extends KnockoutObservable<T> {
     isValid: KnockoutComputed<boolean>;
     error?: string;
-    errors?: KnockoutValidationErrors;
+    errors?: KnockoutValidatedErrors;
 
     isValidating?: KnockoutObservable<boolean>;
     isModified?: KnockoutObservable<boolean>;
-    rules?: KnockoutObservableArray<KnockoutValidationRule>;
+    rules?: KnockoutObservableArray<KnockoutValidatedRule>;
 
     _disposeValidation? (): void;
 }
-
 
 export function validated<T>(initialValue: T): KnockoutValidatedObservable<T> {
     var obsv: any = ko.observable<T>(initialValue),
@@ -124,14 +134,14 @@ export function validated<T>(initialValue: T): KnockoutValidatedObservable<T> {
         subscription: KnockoutSubscription;
 
     obsv.subscribe(function (newValue) {
-        obsv.errors = ko.validation.group(newValue || {});
+        obsv.errors = (<any>ko).validation.group(newValue || {});
         isValid(obsv.errors().length === 0);
 
         subscription.dispose();
         subscription = obsv.errors.subscribe((errors: string[]) => isValid(errors.length === 0));
     });
 
-    obsv.errors = ko.validation.group(initialValue || {});
+    obsv.errors = (<any>ko).validation.group(initialValue || {});
     isValid(obsv.errors().length === 0);
 
     obsv.isValid = ko.computed(() => isValid());
