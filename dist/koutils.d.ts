@@ -1,7 +1,5 @@
 /// <reference path="../../../typings/knockout/knockout.d.ts" />
-/// <reference path="../../../typings/knockout.validation/knockout.validation.d.ts" />
 /// <reference path="../../../typings/underscore/underscore.d.ts" />
-/// <reference path="../../../typings/moment/moment.d.ts" />
 
 interface UnderscoreStatic {
     sum<T>(list: _.List<T>, iterator: _.ListIterator<T, number>, context?: any): number;
@@ -141,17 +139,6 @@ export = ChangeTracker;
 declare module "koutils/extenders" {
 }
 
-declare module "koutils/moment" {
-export interface MomentExtenderOptions {
-    format: string;
-    unix: boolean;
-    utc: boolean;
-}
-export function getMoment(date: any, unix: boolean, utc: boolean, format: string): Moment;
-export function dateToString(moment: Moment, unix: boolean, utc: boolean, format: string): string;
-export function getMomentDuration(timeSpan: string): Duration;
-}
-
 declare module "koutils/observable" {
 export interface KnockoutHistoryObservableStatic {
     fn: KnockoutHistoryObservableFunctions<any>;
@@ -172,13 +159,24 @@ export interface KnockoutHistoryObservable<T> extends KnockoutHistoryObservableF
     canGoForward: KnockoutComputed<boolean>;
 }
 export var history: KnockoutHistoryObservableStatic;
+export interface KnockoutValidatedRule {
+    rule: string;
+    params: any;
+    message?: string;
+    condition?: () => boolean;
+}
+export interface KnockoutValidatedErrors {
+    (): string[];
+    showAllMessages(): void;
+    showAllMessages(show: boolean): void;
+}
 export interface KnockoutValidatedObservable<T> extends KnockoutObservable<T> {
     isValid: KnockoutComputed<boolean>;
     error?: string;
-    errors?: KnockoutValidationErrors;
+    errors?: KnockoutValidatedErrors;
     isValidating?: KnockoutObservable<boolean>;
     isModified?: KnockoutObservable<boolean>;
-    rules?: KnockoutObservableArray<KnockoutValidationRule>;
+    rules?: KnockoutObservableArray<KnockoutValidatedRule>;
     _disposeValidation? (): void;
 }
 export function validated<T>(initialValue: T): KnockoutValidatedObservable<T>;
