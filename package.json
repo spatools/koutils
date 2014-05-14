@@ -1,10 +1,9 @@
 ﻿{
   "name": "koutils",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "main": "dist/koutils.js",
   "scripts": {
-	"install": "bower install && tsd reinstall",
     "test": "grunt test"
   },
   "repository": {
@@ -23,19 +22,19 @@
     "amd"
   ],
   "devDependencies": {
-	"grunt": ">=0.4.2",
-	"grunt-contrib-clean": ">=0.5.0",
-	"grunt-contrib-concat": ">=0.3.0",
-	"grunt-contrib-connect": ">=0.6.0",
-	"grunt-contrib-jshint": ">=0.8.0",
-	"grunt-contrib-watch": ">=0.5.3",
-	"grunt-mocha": ">=0.4.10",
-	"grunt-nuget": ">=0.1.1",
-	"grunt-typescript": ">=0.2.7",
-	"grunt-tsdamdconcat": ">=0.1.0",
-	"grunt-tslint": ">=0.4.0",
-	"load-grunt-tasks": ">=0.3.0",
-	"time-grunt": ">=0.2.9"
+    "grunt": ">=0.4.2",
+    "grunt-contrib-clean": ">=0.5.0",
+    "grunt-contrib-concat": ">=0.3.0",
+    "grunt-contrib-connect": ">=0.6.0",
+    "grunt-contrib-jshint": ">=0.8.0",
+    "grunt-contrib-watch": ">=0.5.3",
+    "grunt-mocha": ">=0.4.10",
+    "grunt-nuget": ">=0.1.1",
+    "grunt-typescript": ">=0.2.7",
+    "grunt-tsdamdconcat": ">=0.1.0",
+    "grunt-tslint": ">=0.4.0",
+    "load-grunt-tasks": ">=0.3.0",
+    "time-grunt": ">=0.2.9"
   },
   "author": "SPA Tools",
   "license": "MIT",
