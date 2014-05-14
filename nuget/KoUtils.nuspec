@@ -35,7 +35,6 @@
   <files>
     <file src="..\dist\changetracker.js" target="Content\Scripts\koutils" />
     <file src="..\dist\extenders.js" target="Content\Scripts\koutils" />
-    <file src="..\dist\moment.js" target="Content\Scripts\koutils" />
     <file src="..\dist\observable.js" target="Content\Scripts\koutils" />
     <file src="..\dist\underscore.js" target="Content\Scripts\koutils" />
     <file src="..\dist\utils.js" target="Content\Scripts\koutils" />
