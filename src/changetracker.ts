@@ -18,7 +18,7 @@ class ChangeTracker {
             this.tracked = object;
             this.lastData = ko.observable(hashFunction(object, params));
             this.isModified = ko.observable(isAlreadyModified);
-            
+
             this.hasChanges = ko.computed<boolean>(function () {
                 return this.isModified() || this.hashFunction(this.tracked, this.params) !== this.lastData();
             }, this);
