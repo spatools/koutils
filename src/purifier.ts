@@ -10,7 +10,7 @@ function noop() {
     return true;
 }
 
-export function purify<T>(pureComputed: KnockoutComputed<T>, evaluator: () => T, owner?: any): KnockoutComputed<T> {
+export function purify<T>(pureComputed: KnockoutComputed<T>, evaluator: () => any, owner?: any): KnockoutComputed<T> {
     var internalComputed = ko.pureComputed(evaluator, owner),
         disposable;
 
@@ -37,7 +37,7 @@ export function purify<T>(pureComputed: KnockoutComputed<T>, evaluator: () => T,
     return internalComputed;
 }
 
-export function unpromise<T>(evaluator: () => Thenable<T>|any, options?: UnpromiseOptions<T>) {
+export function unpromise<T>(evaluator: () => KoUtils.Thenable<T>|any, options?: UnpromiseOptions<T>): KnockoutComputed<T> {
     options = options || {};
 
     var latestValue = ko.observable(options.initialValue),
@@ -45,7 +45,7 @@ export function unpromise<T>(evaluator: () => Thenable<T>|any, options?: Unpromi
         owner = options.owner,
 
         waitingOn = 0,
-        pureComputed = ko.pureComputed(latestValue);
+        pureComputed = ko.pureComputed<T>(latestValue);
 
     purify(pureComputed, function () {
         var prom = evaluator.call(owner),

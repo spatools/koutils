@@ -1,18 +1,22 @@
 ﻿/// <reference path="../typings/knockout/knockout.d.ts" />
 
-interface Thenable<T> {
-    then<U>(onResolve: (result: T) => Thenable<U>);
-    then<U>(onResolve: (result: T) => U);
+declare module KoUtils {
 
-    then<U>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => Thenable<U>);
-    then<U>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => U);
-    then<U>(onResolve: (result: T) => U, onReject: (error: Error) => Thenable<U>);
-    then<U>(onResolve: (result: T) => U, onReject: (error: Error) => U);
+    interface Thenable<T> {
+        then<U>(onResolve: (result: T) => Thenable<U>);
+        then<U>(onResolve: (result: T) => U);
 
-    then<U, V>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => Thenable<V>);
-    then<U, V>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => V);
-    then<U, V>(onResolve: (result: T) => U, onReject: (error: Error) => Thenable<V>);
-    then<U, V>(onResolve: (result: T) => U, onReject: (error: Error) => V);
+        then<U>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => Thenable<U>);
+        then<U>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => U);
+        then<U>(onResolve: (result: T) => U, onReject: (error: Error) => Thenable<U>);
+        then<U>(onResolve: (result: T) => U, onReject: (error: Error) => U);
+
+        then<U, V>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => Thenable<V>);
+        then<U, V>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => V);
+        then<U, V>(onResolve: (result: T) => U, onReject: (error: Error) => Thenable<V>);
+        then<U, V>(onResolve: (result: T) => U, onReject: (error: Error) => V);
+    }
+
 }
 
 interface KnockoutComputed<T> {

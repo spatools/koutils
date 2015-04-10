@@ -2,6 +2,7 @@
 /// <amd-dependency path="./underscore" />
 
 import ko = require("knockout");
+import purifier = require("./purifier");
 import utils = require("./utils");
 
 //#region History Observable
@@ -107,6 +108,7 @@ export var history: KnockoutHistoryObservableStatic = (function () {
 //#endregion
 
 //#region Validated Observable
+
 export interface KnockoutValidatedRule {
     rule: string;
     params: any;
@@ -190,6 +192,14 @@ export function simulated<T>(element: Element, getter: () => T): KnockoutObserva
 
     return obs;
 
+}
+
+//#endregion
+
+//#region Async Computed
+
+export function asyncComputed<T>(evaluator: () => KoUtils.Thenable<T>|any, options?: purifier.UnpromiseOptions<T>): KnockoutComputed<T> {
+    return purifier.unpromise<T>(evaluator, options);
 }
 
 //#endregion

@@ -99,7 +99,3 @@ extenders.cthrottle = function (target: any, timeout: number): any {
     target.throttleEvaluation = timeout;
     return target;
 };
-
-//extenders.async = function (target: any, defaultValue: any): any {
-
-//};
