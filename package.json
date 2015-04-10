@@ -1,44 +1,48 @@
 ﻿{
-  "name": "koutils",
-  "version": "0.1.7",
-  "description": "Knockout Utilities Extensions to simplify Knockout app development",
-  "main": "dist/koutils.js",
-  "scripts": {
-    "test": "grunt test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/spatools/koutils.git"
-  },
-  "keywords": [
-    "knockout",
-    "knockoutjs",
-    "ko",
-    "changeTracker",
-    "utilities",
-    "javascript",
-    "utils",
-    "spatools",
-    "amd"
-  ],
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-connect": "^0.9.0",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-mocha": "^0.4.11",
-    "grunt-nuget": "^0.1.4",
-    "grunt-typescript": "^0.6.1",
-    "grunt-tsdamdconcat": "^0.1.1",
-    "grunt-tslint": "^2.0.0",
-    "jit-grunt": "^0.9.1",
-    "time-grunt": "^1.0.0"
-  },
-  "author": "SPA Tools",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/spatools/koutils/issues"
-  }
+    "name": "koutils",
+    "version": "0.1.7",
+    "description": "Knockout Utilities Extensions to simplify Knockout app development",
+    "main": "dist/koutils.js",
+    "scripts": {
+        "test": "grunt test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/spatools/koutils.git"
+    },
+    "keywords": [
+        "knockout",
+        "knockoutjs",
+        "ko",
+        "changeTracker",
+        "utilities",
+        "javascript",
+        "utils",
+        "spatools",
+        "amd"
+    ],
+    "peerDependencies": { 
+        "typescript": "~1.4.1"
+    },
+    "devDependencies": {
+        "grunt": "^0.4.5",
+        "grunt-contrib-clean": "^0.6.0",
+        "grunt-contrib-concat": "^0.5.1",
+        "grunt-contrib-connect": "^0.10.1",
+        "grunt-contrib-jshint": "^0.11.1",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-mocha": "^0.4.12",
+        "grunt-nuget": "^0.1.4",
+        "grunt-typescript": "^0.6.1",
+        "grunt-tsdamdconcat": "^0.1.1",
+        "grunt-tslint": "^2.0.0",
+        "jit-grunt": "^0.9.1",
+        "time-grunt": "^1.1.0",
+        "typescript": "^1.4.1"
+    },
+    "author": "SPA Tools",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/spatools/koutils/issues"
+    }
 }
