@@ -79,6 +79,86 @@ describe("Utils Module", () => {
 
     });
 
+    describe("is", () => {
+
+        it("should return true if value is of the specified type", () => {
+            var str = "a string value",
+                num = 123,
+                bool = true,
+                fn = () => null,
+                obj = {},
+                undef,
+                nul = null;
+
+            utils.is(str, "string").should.be.ok;
+            utils.is(num, "number").should.be.ok;
+            utils.is(bool, "boolean").should.be.ok;
+            utils.is(fn, "function").should.be.ok;
+            utils.is(obj, "object").should.be.ok;
+            utils.is(undef, "undefined").should.be.ok;
+            utils.is(nul, "object").should.be.ok;
+        });
+
+        it("should return false if value is not of the specified type", () => {
+            var str = "a string value",
+                num = 123,
+                bool = true,
+                fn = () => null,
+                obj = {},
+                undef,
+                nul = null;
+
+            utils.is(str, "number").should.not.be.ok;
+            utils.is(num, "boolean").should.not.be.ok;
+            utils.is(bool, "function").should.not.be.ok;
+            utils.is(fn, "object").should.not.be.ok;
+            utils.is(obj, "test").should.not.be.ok;
+            utils.is(undef, "string").should.not.be.ok;
+            utils.is(nul, "test").should.not.be.ok;
+        });
+
+    });
+
+    describe("isOf", () => {
+
+        it("should return true if value is of one of the specified types", () => {
+            var str = "a string value",
+                num = 123,
+                bool = true,
+                fn = () => null,
+                obj = {},
+                undef,
+                nul = null;
+
+            utils.isOf(str, "string", "number", "boolean").should.be.ok;
+            utils.isOf(num, "string", "number", "boolean").should.be.ok;
+            utils.isOf(bool, "string", "number", "boolean").should.be.ok;
+            utils.isOf(fn, "function", "object").should.be.ok;
+            utils.isOf(obj, "function", "object").should.be.ok;
+            utils.isOf(undef, "undefined").should.be.ok;
+            utils.isOf(nul, "function", "object").should.be.ok;
+        });
+
+        it("should return false if value is not of the specified type", () => {
+            var str = "a string value",
+                num = 123,
+                bool = true,
+                fn = () => null,
+                obj = {},
+                undef,
+                nul = null;
+
+            utils.isOf(str, "number", "boolean").should.not.be.ok;
+            utils.isOf(num, "boolean", "string").should.not.be.ok;
+            utils.isOf(bool, "function", "object").should.not.be.ok;
+            utils.isOf(fn, "object", "string").should.not.be.ok;
+            utils.isOf(obj, "test", "test2").should.not.be.ok;
+            utils.isOf(undef, "string", "boolean").should.not.be.ok;
+            utils.isOf(nul, "test", "test2").should.not.be.ok;
+        });
+
+    });
+
     describe("isDate", () => {
 
         it("should return true if value is a valid ISO Date", () => {
@@ -93,6 +173,27 @@ describe("Utils Module", () => {
             utils.isDate(a).should.not.be.ok;
             utils.isDate(b).should.not.be.ok;
             utils.isDate(c).should.not.be.ok;
+        });
+
+    });
+
+    describe("isNullOrUndefined", () => {
+
+        it("should return true if value is null or undefined", () => {
+            var a = null, b;
+
+            utils.isNullOrUndefined(a).should.be.ok;
+            utils.isNullOrUndefined(b).should.be.ok;
+        });
+
+        it("should return false if value is any other thing", () => {
+            var a = "a", b = true, c = {}, d = () => null, e = 1;
+
+            utils.isNullOrUndefined(a).should.not.be.ok;
+            utils.isNullOrUndefined(b).should.not.be.ok;
+            utils.isNullOrUndefined(c).should.not.be.ok;
+            utils.isNullOrUndefined(d).should.not.be.ok;
+            utils.isNullOrUndefined(e).should.not.be.ok;
         });
 
     });
@@ -268,6 +369,34 @@ describe("Utils Module", () => {
             value1.should.equal("100000000");
             value2.should.equal("11000");
             value3.should.equal("1111");
+        });
+
+    });
+
+    describe("arrayEquals", () => {
+
+        it("should return true when arrays have exact same values", () => {
+            var obj1 = { prop: "value" },
+                obj2 = { prop: "eulav" },
+                obj3 = { prop: "lueva" },
+                obj4 = { prop: "eluav" };
+
+            var array1 = [obj1, obj2, obj3, obj4],
+                array2 = [obj1, obj2],
+                array3 = [obj2, obj3],
+                array4 = [obj1, obj3];
+
+            var diff1 = utils.arrayDiff(array1, array2, array3, array4);
+            diff1.length.should.equal(1);
+            diff1[0].should.equal(obj4);
+
+            var diff2 = utils.arrayDiff(array1, array3);
+            diff2.length.should.equal(2);
+            diff2[0].should.equal(obj1);
+            diff2[1].should.equal(obj4);
+
+            var diff3 = utils.arrayDiff(array2, array1);
+            diff3.length.should.equal(0);
         });
 
     });
