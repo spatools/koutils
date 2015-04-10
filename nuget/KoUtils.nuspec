@@ -22,21 +22,19 @@
       Utilities,
       ChangeTracker,
       Extension,
-      Underscore,
       Moment,
       AMD
     </tags>
     <dependencies>
-      <dependency id="RequireJS" version="2.1.10" />
-      <dependency id="Knockout" version="3.0.0" />
-      <dependency id="Underscore" version="1.6.0" />
+      <dependency id="RequireJS" version="2.1.17" />
+      <dependency id="Knockout" version="3.3.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\dist\changetracker.js" target="Content\Scripts\koutils" />
     <file src="..\dist\extenders.js" target="Content\Scripts\koutils" />
     <file src="..\dist\observable.js" target="Content\Scripts\koutils" />
-    <file src="..\dist\underscore.js" target="Content\Scripts\koutils" />
+    <file src="..\dist\purifier.js" target="Content\Scripts\koutils" />
     <file src="..\dist\utils.js" target="Content\Scripts\koutils" />
     <file src="..\dist\koutils.d.ts" target="Content\Scripts\koutils" />
   </files>
