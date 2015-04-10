@@ -20,7 +20,7 @@ declare module KoUtils {
 }
 
 interface KnockoutComputed<T> {
-    getSubscriptionsCount(event: string): number;
+    getSubscriptionsCount(event?: string): number;
 }
 
 interface KnockoutExtenders {

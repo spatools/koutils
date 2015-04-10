@@ -82,4 +82,4 @@ ko.bindingHandlers.purify = {
     }
 };
 
-ko.virtualElements.allowedBindings["purify"] = true;
+(<any>ko.virtualElements.allowedBindings).purify = true;
