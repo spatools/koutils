@@ -1,5 +1,4 @@
 ﻿/// <reference path="typings/knockout/knockout.d.ts" />
-/// <reference path="typings/underscore/underscore.d.ts" />
 /// <reference path="typings/globalize/globalize.d.ts" />
 /// <reference path="src/base.d.ts" />
 

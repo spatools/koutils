@@ -23,14 +23,13 @@
     "**/.*",
     "node_modules",
     "bower_components",
-	"typings",
-	"nuget",
+    "typings",
+    "nuget",
     "test"
   ],
   "dependencies": {
-    "requirejs": "^2.1.16",
-    "underscore": "^1.7.0",
-    "knockoutjs": "^3.2.0"
+    "requirejs": "^2.1.17",
+    "knockoutjs": "^3.3.0"
   },
   "devDependencies": {
     "mocha": "~1.17.1",
