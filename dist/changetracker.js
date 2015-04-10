@@ -1,14 +1,14 @@
-define(["require", "exports", "knockout"], function(require, exports, ko) {
+/// <reference path="../_definitions.d.ts" />
+define(["require", "exports", "knockout"], function (require, exports, ko) {
     var ChangeTracker = (function () {
         function ChangeTracker(object, isAlreadyModified, hashFunction, params) {
-            if (typeof isAlreadyModified === "undefined") { isAlreadyModified = false; }
-            if (typeof hashFunction === "undefined") { hashFunction = ko.toJSON; }
+            if (isAlreadyModified === void 0) { isAlreadyModified = false; }
+            if (hashFunction === void 0) { hashFunction = ko.toJSON; }
             this.hashFunction = hashFunction;
             this.params = params;
             this.tracked = object;
             this.lastData = ko.observable(hashFunction(object, params));
             this.isModified = ko.observable(isAlreadyModified);
-
             this.hasChanges = ko.computed(function () {
                 return this.isModified() || this.hashFunction(this.tracked, this.params) !== this.lastData();
             }, this);
@@ -19,7 +19,5 @@ define(["require", "exports", "knockout"], function(require, exports, ko) {
         };
         return ChangeTracker;
     })();
-
-    
     return ChangeTracker;
 });
