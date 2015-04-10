@@ -2,7 +2,7 @@
 /// <amd-dependency path="./underscore" />
 
 import ko = require("knockout");
-import _ = require("underscore");
+import utils = require("./utils");
 
 //#region History Observable
 
@@ -29,76 +29,80 @@ export interface KnockoutHistoryObservable<T> extends KnockoutHistoryObservableF
     canGoForward: KnockoutComputed<boolean>;
 }
 
-function historyObservable<T>(initialValue: T): KnockoutHistoryObservable<T> {
-    var self = {
-        latestValues: ko.observableArray([initialValue]),
-        selectedIndex: ko.observable(0)
-    };
-    _.extend(self, {
-        canGoBack: ko.computed(() => self.selectedIndex() > 0),
-        canGoNext: ko.computed(() => self.selectedIndex() < self.latestValues.size() - 1),
-    });
-    var result: any = ko.computed({
-        read: () => {
-            var index = self.selectedIndex(),
-                values = self.latestValues();
+export var history: KnockoutHistoryObservableStatic = (function () {
+    var historyObservable: any = function <T>(initialValue: T): KnockoutHistoryObservable<T> {
+        var self: any = {
+            latestValues: ko.observableArray([initialValue]),
+            selectedIndex: ko.observable(0)
+        };
 
-            if (index > values.length) {
-                index = 0;
-            }
+        self.canGoBack = ko.pureComputed(() => self.selectedIndex() > 0);
+        self.canGoNext = ko.pureComputed(() => self.selectedIndex() < self.latestValues.size() - 1);
 
-            return values[index];
-        },
-        write: (value: any) => {
-            var index = self.selectedIndex();
-            if (value !== self.latestValues()[index]) {
-                if (index !== self.latestValues.size() - 1) {
-                    self.latestValues.splice(index + 1);
+        ko.utils.extend(self, historyObservable.fn);
+
+        var result: any = ko.computed({
+            read: () => {
+                var index = self.selectedIndex(),
+                    values = self.latestValues();
+
+                if (index > values.length) {
+                    index = 0;
                 }
 
-                self.latestValues.push(value);
-                self.selectedIndex(index + 1);
+                return values[index];
+            },
+            write: (value: any) => {
+                var index = self.selectedIndex();
+                if (value !== self.latestValues()[index]) {
+                    if (index !== self.latestValues.size() - 1) {
+                        self.latestValues.splice(index + 1);
+                    }
+
+                    self.latestValues.push(value);
+                    self.selectedIndex(index + 1);
+                }
             }
+        }).extend({ cnotify: "reference" });
+
+        ko.utils.extend(result, self);
+
+        return result;
+    };
+
+    historyObservable.fn = {
+        back: function () {
+            if (this.canGoBack()) {
+                this.selectedIndex(this.selectedIndex() - 1);
+            }
+            return this();
+        },
+        next: function () {
+            if (this.canGoNext()) {
+                this.selectedIndex(this.selectedIndex() + 1);
+            }
+            return this();
+        },
+        replace: function (value: any): void {
+            var superNotify = ko.subscribable.fn.notifySubscribers.bind(this),
+                oldValue = this();
+
+            var index = this.selectedIndex();
+            this.latestValues.valueWillMutate();
+            this.latestValues()[index] = value;
+            this.latestValues.valueHasMutated();
+        },
+        reset: function (value?: any): void {
+            if (!value)
+                value = this();
+
+            this.latestValues.splice(0, this.latestValues().length, value);
+            this.selectedIndex(0);
         }
-    }).extend({ cnotify: "reference" });
+    };
 
-    _.extend(result, self, history.fn);
-
-    return result;
-}
-
-var historyFn = {
-    back: function () {
-        if (this.canGoBack()) {
-            this.selectedIndex(this.selectedIndex() - 1);
-        }
-        return this();
-    },
-    next: function () {
-        if (this.canGoNext()) {
-            this.selectedIndex(this.selectedIndex() + 1);
-        }
-        return this();
-    },
-    replace: function (value: any): void {
-        var superNotify = _.bind(ko.subscribable.fn.notifySubscribers, this),
-            oldValue = this();
-
-        var index = this.selectedIndex();
-        this.latestValues.valueWillMutate();
-        this.latestValues()[index] = value;
-        this.latestValues.valueHasMutated();
-    },
-    reset: function (value?: any): void {
-        if (!value)
-            value = this();
-
-        this.latestValues.splice(0, this.latestValues.size(), value);
-        this.selectedIndex(0);
-    }
-};
-
-export var history: KnockoutHistoryObservableStatic = _.extend(historyObservable, { fn: historyFn });
+    return historyObservable;
+})();
 
 //#endregion
 
@@ -148,6 +152,44 @@ export function validated<T>(initialValue: T): KnockoutValidatedObservable<T> {
     subscription = obsv.errors.subscribe((errors: string[]) => isValid(errors.length === 0));
 
     return obsv;
+}
+
+//#endregion
+
+//#region Simulated Observable
+
+interface SimulatedItems<T> {
+    observable: KnockoutObservable<T>;
+    getter: () => T;
+    element: Element;
+}
+
+var timer: number = null,
+    items: SimulatedItems<any>[] = [];
+
+function check() {
+    items = items.filter(item => utils.isNodeInDOM(item.element));
+
+    if (items.length === 0) {
+        clearInterval(timer);
+        timer = null;
+        return;
+    }
+
+    items.forEach(item => { item.observable(item.getter()); });
+}
+
+export function simulated<T>(element: Element, getter: () => T): KnockoutObservable<T> {
+    var obs = ko.observable(getter());
+
+    items.push({ observable: obs, getter: getter, element: element });
+
+    if (timer === null) {
+        timer = setInterval(check, 100);
+    }
+
+    return obs;
+
 }
 
 //#endregion

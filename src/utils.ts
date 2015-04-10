@@ -1,7 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
 import ko = require("knockout");
-import _ = require("underscore");
 
 export interface Size {
     width: number;
@@ -34,7 +33,7 @@ export function createAccessor<T>(value: T): () => T {
 
 /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
 export function createObservable<T>(value: any, _default?: T): KnockoutObservable<T> {
-    if (_.isUndefined(value) || _.isNull(value)) {
+    if (isNullOrUndefined(value)) {
         return ko.observable(_default);
     }
 
@@ -66,9 +65,30 @@ export function createObservableArray(value: any, mapFunction?: (obj: any) => an
 
 //#region Check Methods
 
+/** Test if value is of the specified type. */
+export function is(obj: any, type: string): boolean {
+    return typeof obj === type;
+}
+/** Test if value is of one of the specified types. */
+export function isOf(obj: any, ...types: string[]): boolean {
+    var objType = typeof obj;
+    return types.some(t => t === objType);
+}
+
+/** Test if value is an object. */
+export function isObject(obj: any): boolean {
+    var objType = typeof obj;
+    return objType === "function" || objType === "object" && !!obj;
+}
+
 /** Test if value is a date. */
 export function isDate(value: string): boolean {
     return (/\d{2,4}-\d{2}-\d{2}[T -_]\d{2}:\d{2}:\d{2}/).test(value);
+}
+
+/** Test if value is null or undefined. */
+export function isNullOrUndefined(value: any): boolean {
+    return typeof value === "undefined" || value === null;
 }
 
 /** Test if value is null or a white space. */
@@ -82,7 +102,7 @@ export function isNullOrWhiteSpace(value: string): boolean {
 
 /** Make inheritance operation. */
 export function inherits(obj: any, base: any, prototype: any): any {
-    if (_.isFunction(base.constructor)) {
+    if (is(base.constructor, "function")) {
         //Normal Inheritance 
         obj.prototype = new base();
         obj.prototype.constructor = obj;
@@ -95,7 +115,7 @@ export function inherits(obj: any, base: any, prototype: any): any {
     }
 
     if (prototype) {
-        _.extend(obj.prototype, prototype);
+        ko.utils.extend(obj.prototype, prototype);
     }
 
     return obj;
@@ -136,13 +156,25 @@ export function getWindowSize(): Size {
     };
 }
 
+/** Check if node is in DOM */
+export function isNodeInDOM(node: Node): boolean {
+    var ancestor = node;
+
+    while (ancestor.parentNode) {
+        ancestor = ancestor.parentNode;
+    }
+
+    // ancestor should be a document
+    return !!(<Document>ancestor).body;
+}
+
 /** Get query strings. If a key is specified, returns only query string for specified key. */
 export function getQueryString(key: string): any {
     var dictionary = {},
         qs = window.location.search.replace("?", ""),
         pairs = qs.split("&");
 
-    _.each(pairs, val => {
+    pairs.forEach(val => {
         var pair = val.split("=");
         dictionary[pair[0]] = pair[1];
     });
@@ -160,7 +192,7 @@ export function getQueryString(key: string): any {
 
 /** Format text by using a format template */
 export function format(text: string, ...args: any[]): string {
-    return text.replace(/\{+-?[0-9]+(:[^}]+)?\}+/g, function (tag) {
+    return text.replace(/\{+-?[0-9]+(:[^}]+)?\}+/g, tag => {
         var match = tag.match(/(\{+)(-?[0-9]+)(:([^\}]+))?(\}+)/),
             index = parseInt(match[2], 10),
             value = args[index];
@@ -210,10 +242,21 @@ export interface ArrayComparison {
     removed: any[];
 }
 
+/** 
+ * Take the difference between one array and a number of other arrays. 
+ * Only the elements present in just the first array will remain.
+ **/
+export function arrayDiff(array: any[], ...others: any[]): any[] {
+    var tmp = [],
+        rest = tmp.concat.apply(tmp, others);
+
+    return array.filter(item => rest.indexOf(item) === -1);
+}
+
 export function arrayCompare(array1: any[], array2: any[]): ArrayComparison {
     return {
-        added: _.difference(array2, array1),
-        removed: _.difference(array1, array2),
+        added: arrayDiff(array2, array1),
+        removed: arrayDiff(array1, array2),
     };
 }
 

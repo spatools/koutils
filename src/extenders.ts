@@ -1,7 +1,6 @@
 ﻿/// <reference path="../_definitions.d.ts" />
 
 import ko = require("knockout");
-import _ = require("underscore");
 
 var extenders = <any>ko.extenders;
 
@@ -27,14 +26,14 @@ extenders.delay = function (target: any, delay: number): any {
 
 extenders.cnotify = function (target: any, notifyWhen: any): any {
     var latestValue: any = null,
-        superNotify: Function = _.bind(ko.subscribable.fn.notifySubscribers, target),
+        superNotify: Function = ko.subscribable.fn.notifySubscribers.bind(target),
         notify = function (value) {
             superNotify(latestValue, "beforeChange");
             superNotify(value);
         };
 
     target.notifySubscribers = function (value, event) {
-        if (_.isFunction(notifyWhen)) { // custom
+        if (typeof notifyWhen === "function") { // custom
             if (event === "beforeChange") {
                 latestValue = target.peek();
             }
@@ -73,7 +72,7 @@ extenders.cnotify = function (target: any, notifyWhen: any): any {
 };
 
 extenders.notify = function (target: any, notifyWhen: any): any {
-    if (_.isFunction(notifyWhen)) { // custom
+    if (typeof notifyWhen === "function") { // custom
         target.equalityComparer = notifyWhen;
         return target;
     }
@@ -100,3 +99,7 @@ extenders.cthrottle = function (target: any, timeout: number): any {
     target.throttleEvaluation = timeout;
     return target;
 };
+
+//extenders.async = function (target: any, defaultValue: any): any {
+
+//};
