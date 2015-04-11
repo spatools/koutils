@@ -1,6 +1,5 @@
 /// <reference path="../_definitions.d.ts" />
-/// <amd-dependency path="./underscore" />
-define(["require", "exports", "knockout", "./purifier", "./utils", "./underscore"], function (require, exports, ko, purifier, utils) {
+define(["require", "exports", "knockout", "./purifier", "./utils"], function (require, exports, ko, purifier, utils) {
     exports.history = (function () {
         var historyObservable = function (initialValue) {
             var self = {
@@ -10,7 +9,7 @@ define(["require", "exports", "knockout", "./purifier", "./utils", "./underscore
             self.canGoBack = ko.pureComputed(function () { return self.selectedIndex() > 0; });
             self.canGoNext = ko.pureComputed(function () { return self.selectedIndex() < self.latestValues.size() - 1; });
             ko.utils.extend(self, historyObservable.fn);
-            var result = ko.computed({
+            var result = ko.pureComputed({
                 read: function () {
                     var index = self.selectedIndex(), values = self.latestValues();
                     if (index > values.length) {
@@ -28,7 +27,7 @@ define(["require", "exports", "knockout", "./purifier", "./utils", "./underscore
                         self.selectedIndex(index + 1);
                     }
                 }
-            }).extend({ cnotify: "reference" });
+            }).extend({ notify: "reference" });
             ko.utils.extend(result, self);
             return result;
         };
@@ -71,7 +70,7 @@ define(["require", "exports", "knockout", "./purifier", "./utils", "./underscore
         });
         obsv.errors = ko.validation.group(initialValue || {});
         isValid(obsv.errors().length === 0);
-        obsv.isValid = ko.computed(function () { return isValid(); });
+        obsv.isValid = ko.pureComputed(isValid);
         subscription = obsv.errors.subscribe(function (errors) { return isValid(errors.length === 0); });
         return obsv;
     }
