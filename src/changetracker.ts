@@ -28,6 +28,18 @@ class ChangeTracker {
         this.lastData(this.hashFunction(this.tracked, this.params));
         this.isModified(false);
     }
+
+    public dispose() {
+        this.hasChanges.dispose();
+        this.hasChanges = null;
+
+        this.lastData(null);
+        this.isModified(false);
+
+        this.tracked = null;
+        this.params = null;
+        this.hashFunction = null;
+    }
 }
 
 export = ChangeTracker;
