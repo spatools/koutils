@@ -1,5 +1,4 @@
 ﻿/// <reference path="../_definitions.d.ts" />
-/// <amd-dependency path="./underscore" />
 
 import ko = require("knockout");
 import purifier = require("./purifier");
@@ -42,7 +41,7 @@ export var history: KnockoutHistoryObservableStatic = (function () {
 
         ko.utils.extend(self, historyObservable.fn);
 
-        var result: any = ko.computed({
+        var result: any = ko.pureComputed({
             read: () => {
                 var index = self.selectedIndex(),
                     values = self.latestValues();
@@ -64,7 +63,7 @@ export var history: KnockoutHistoryObservableStatic = (function () {
                     self.selectedIndex(index + 1);
                 }
             }
-        }).extend({ cnotify: "reference" });
+        }).extend({ notify: "reference" });
 
         ko.utils.extend(result, self);
 
@@ -150,7 +149,7 @@ export function validated<T>(initialValue: T): KnockoutValidatedObservable<T> {
     obsv.errors = (<any>ko).validation.group(initialValue || {});
     isValid(obsv.errors().length === 0);
 
-    obsv.isValid = ko.computed(() => isValid());
+    obsv.isValid = ko.pureComputed(isValid);
     subscription = obsv.errors.subscribe((errors: string[]) => isValid(errors.length === 0));
 
     return obsv;
@@ -166,7 +165,7 @@ interface SimulatedItems<T> {
     element: Element;
 }
 
-var timer: number = null,
+var timer: NodeTimer = null,
     items: SimulatedItems<any>[] = [];
 
 function check() {
