@@ -16,47 +16,6 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
         });
         return target;
     };
-    extenders.cnotify = function (target, notifyWhen) {
-        var latestValue = null, superNotify = ko.subscribable.fn.notifySubscribers.bind(target), notify = function (value) {
-            superNotify(latestValue, "beforeChange");
-            superNotify(value);
-        };
-        target.notifySubscribers = function (value, event) {
-            if (typeof notifyWhen === "function") {
-                if (event === "beforeChange") {
-                    latestValue = target.peek();
-                }
-                else if (!notifyWhen(latestValue, value)) {
-                    notify(value);
-                }
-                return;
-            }
-            switch (notifyWhen) {
-                case "primitive":
-                    if (event === "beforeChange") {
-                        latestValue = target.peek();
-                    }
-                    else if (!ko.observable.fn.equalityComparer(latestValue, value)) {
-                        notify(value);
-                    }
-                    break;
-                case "reference":
-                    if (event === "beforeChange") {
-                        latestValue = target.peek();
-                    }
-                    else if (latestValue !== value) {
-                        notify(value);
-                    }
-                    break;
-                default:
-                    //case "auto":
-                    //case "always":
-                    superNotify.apply(null, arguments);
-                    break;
-            }
-        };
-        return target;
-    };
     extenders.notify = function (target, notifyWhen) {
         if (typeof notifyWhen === "function") {
             target.equalityComparer = notifyWhen;

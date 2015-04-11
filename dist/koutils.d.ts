@@ -44,6 +44,7 @@ class ChangeTracker {
     hasChanges: KnockoutComputed<boolean>;
     constructor(object: any, isAlreadyModified?: boolean, hashFunction?: (obj: any, params?: any) => string, params?: any);
     reset(): void;
+    dispose(): void;
 }
 export = ChangeTracker;
 }

@@ -17,6 +17,15 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
             this.lastData(this.hashFunction(this.tracked, this.params));
             this.isModified(false);
         };
+        ChangeTracker.prototype.dispose = function () {
+            this.hasChanges.dispose();
+            this.hasChanges = null;
+            this.lastData(null);
+            this.isModified(false);
+            this.tracked = null;
+            this.params = null;
+            this.hashFunction = null;
+        };
         return ChangeTracker;
     })();
     return ChangeTracker;
