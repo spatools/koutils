@@ -24,53 +24,6 @@ extenders.delay = function (target: any, delay: number): any {
     return target;
 };
 
-extenders.cnotify = function (target: any, notifyWhen: any): any {
-    var latestValue: any = null,
-        superNotify: Function = ko.subscribable.fn.notifySubscribers.bind(target),
-        notify = function (value) {
-            superNotify(latestValue, "beforeChange");
-            superNotify(value);
-        };
-
-    target.notifySubscribers = function (value, event) {
-        if (typeof notifyWhen === "function") { // custom
-            if (event === "beforeChange") {
-                latestValue = target.peek();
-            }
-            else if (!notifyWhen(latestValue, value)) {
-                notify(value);
-            }
-            return;
-        }
-
-        switch (notifyWhen) {
-            case "primitive":
-                if (event === "beforeChange") {
-                    latestValue = target.peek();
-                }
-                else if (!ko.observable.fn.equalityComparer(latestValue, value)) {
-                    notify(value);
-                }
-                break;
-            case "reference":
-                if (event === "beforeChange") {
-                    latestValue = target.peek();
-                }
-                else if (latestValue !== value) {
-                    notify(value);
-                }
-                break;
-            default:
-                //case "auto":
-                //case "always":
-                superNotify.apply(null, arguments);
-                break;
-        }
-    };
-
-    return target;
-};
-
 extenders.notify = function (target: any, notifyWhen: any): any {
     if (typeof notifyWhen === "function") { // custom
         target.equalityComparer = notifyWhen;
