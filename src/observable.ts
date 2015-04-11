@@ -165,7 +165,7 @@ interface SimulatedItems<T> {
     element: Element;
 }
 
-var timer: NodeTimer = null,
+var timer: any = null,
     items: SimulatedItems<any>[] = [];
 
 function check() {
