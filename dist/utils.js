@@ -198,6 +198,7 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
         for (var _i = 1; _i < arguments.length; _i++) {
             others[_i - 1] = arguments[_i];
         }
+        array = array || [];
         var tmp = [], rest = tmp.concat.apply(tmp, others);
         return array.filter(function (item) { return rest.indexOf(item) === -1; });
     }
