@@ -247,6 +247,8 @@ export interface ArrayComparison {
  * Only the elements present in just the first array will remain.
  **/
 export function arrayDiff(array: any[], ...others: any[]): any[] {
+    array = array || [];
+
     var tmp = [],
         rest = tmp.concat.apply(tmp, others);
 
