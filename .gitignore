@@ -6,6 +6,7 @@
 *.user
 *.sln.docstates
 *.sln
+*.*proj
 
 # Keep only ts file in src folder
 src/*.js
@@ -56,6 +57,7 @@ build/
 *.pidb
 *.log
 *.scc
+*.dat
 
 # Visual C++ cache files
 ipch/

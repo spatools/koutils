@@ -50,11 +50,11 @@ export function createObservableArray(value: any, mapFunction?: (obj: any) => an
         return ko.observableArray();
     }
 
-    if (ko.isSubscribable(value) && is(value(), "array")) {
+    if (ko.isSubscribable(value) && Array.isArray(value())) {
         return value;
     }
 
-    if (is(value, "array") && is(mapFunction, "function")) {
+    if (Array.isArray(value) && is(mapFunction, "function")) {
         value = value.map(mapFunction, context);
     }
 
