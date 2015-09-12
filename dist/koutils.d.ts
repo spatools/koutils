@@ -42,6 +42,7 @@ class ChangeTracker {
     private isModified;
     hasChanges: KnockoutComputed<boolean>;
     constructor(object: any, isAlreadyModified?: boolean, hashFunction?: (obj: any, params?: any) => string, params?: any);
+    forceChange(): void;
     reset(): void;
     dispose(): void;
 }

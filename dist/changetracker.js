@@ -13,6 +13,9 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
                 return this.isModified() || this.hashFunction(this.tracked, this.params) !== this.lastData();
             }, this);
         }
+        ChangeTracker.prototype.forceChange = function () {
+            this.isModified(true);
+        };
         ChangeTracker.prototype.reset = function () {
             this.lastData(this.hashFunction(this.tracked, this.params));
             this.isModified(false);

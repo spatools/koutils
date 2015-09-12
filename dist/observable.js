@@ -83,9 +83,7 @@ define(["require", "exports", "knockout", "./purifier", "./utils"], function (re
             timer = null;
             return;
         }
-        items.forEach(function (item) {
-            item.observable(item.getter());
-        });
+        items.forEach(function (item) { item.observable(item.getter()); });
     }
     function simulated(element, getter) {
         var obs = ko.observable(getter());
