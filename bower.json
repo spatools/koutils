@@ -28,7 +28,7 @@
     "test"
   ],
   "dependencies": {
-    "requirejs": "^2.1.17",
+    "requirejs": "^2.1.20",
     "knockoutjs": "^3.3.0"
   },
   "devDependencies": {
