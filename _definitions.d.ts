@@ -9,3 +9,7 @@ interface Window {
 interface Function {
     result?: any; // Memoization Pattern
 }
+
+interface MSApp {
+    execUnsafeLocalFunction<T>(fn: () => T): T;
+}
