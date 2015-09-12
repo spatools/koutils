@@ -1,6 +1,6 @@
 {
   "name": "koutils",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "main": "dist/koutils.js",
   "scripts": {
