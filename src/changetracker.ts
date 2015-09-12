@@ -24,6 +24,10 @@ class ChangeTracker {
             }, this);
     }
 
+    public forceChange() {
+        this.isModified(true);
+    }
+
     public reset() {
         this.lastData(this.hashFunction(this.tracked, this.params));
         this.isModified(false);
