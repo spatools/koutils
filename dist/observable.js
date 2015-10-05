@@ -7,23 +7,24 @@ define(["require", "exports", "knockout", "./purifier", "./utils"], function (re
                 selectedIndex: ko.observable(0)
             };
             self.canGoBack = ko.pureComputed(function () { return self.selectedIndex() > 0; });
-            self.canGoNext = ko.pureComputed(function () { return self.selectedIndex() < self.latestValues.size() - 1; });
+            self.canGoNext = ko.pureComputed(function () { return self.selectedIndex() < self.latestValues().length - 1; });
             ko.utils.extend(self, historyObservable.fn);
             var result = ko.pureComputed({
                 read: function () {
-                    var index = self.selectedIndex(), values = self.latestValues();
+                    var values = self.latestValues();
+                    var index = self.selectedIndex();
                     if (index > values.length) {
                         index = 0;
                     }
                     return values[index];
                 },
                 write: function (value) {
-                    var index = self.selectedIndex();
-                    if (value !== self.latestValues()[index]) {
-                        if (index !== self.latestValues.size() - 1) {
-                            self.latestValues.splice(index + 1);
+                    var index = self.selectedIndex(), values = self.latestValues();
+                    if (value !== values[index]) {
+                        if (index !== values.length - 1) {
+                            values.splice(index + 1);
                         }
-                        self.latestValues.push(value);
+                        values.push(value);
                         self.selectedIndex(index + 1);
                     }
                 }
@@ -45,7 +46,6 @@ define(["require", "exports", "knockout", "./purifier", "./utils"], function (re
                 return this();
             },
             replace: function (value) {
-                var superNotify = ko.subscribable.fn.notifySubscribers.bind(this), oldValue = this();
                 var index = this.selectedIndex();
                 this.latestValues.valueWillMutate();
                 this.latestValues()[index] = value;
@@ -54,7 +54,8 @@ define(["require", "exports", "knockout", "./purifier", "./utils"], function (re
             reset: function (value) {
                 if (!value)
                     value = this();
-                this.latestValues.splice(0, this.latestValues().length, value);
+                var values = this.latestValues();
+                values.splice(0, values.length, value);
                 this.selectedIndex(0);
             }
         };
