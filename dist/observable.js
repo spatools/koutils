@@ -55,7 +55,7 @@ define(["require", "exports", "knockout", "./purifier", "./utils"], function (re
                 if (!value)
                     value = this();
                 var values = this.latestValues();
-                values.splice(0, values.length, value);
+                this.latestValues.splice(0, values.length, value);
                 this.selectedIndex(0);
             }
         };

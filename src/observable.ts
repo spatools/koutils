@@ -100,7 +100,7 @@ export var history: KnockoutHistoryObservableStatic = (function () {
                 value = this();
 
             const values = this.latestValues();
-            values.splice(0, values.length, value);
+            this.latestValues.splice(0, values.length, value);
 
             this.selectedIndex(0);
         }
