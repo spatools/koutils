@@ -37,14 +37,14 @@ export var history: KnockoutHistoryObservableStatic = (function () {
         };
 
         self.canGoBack = ko.pureComputed(() => self.selectedIndex() > 0);
-        self.canGoNext = ko.pureComputed(() => self.selectedIndex() < self.latestValues.size() - 1);
+        self.canGoNext = ko.pureComputed(() => self.selectedIndex() < self.latestValues().length - 1);
 
         ko.utils.extend(self, historyObservable.fn);
 
         var result: any = ko.pureComputed({
             read: () => {
-                var index = self.selectedIndex(),
-                    values = self.latestValues();
+                const values = self.latestValues();
+                let index = self.selectedIndex();
 
                 if (index > values.length) {
                     index = 0;
@@ -53,13 +53,16 @@ export var history: KnockoutHistoryObservableStatic = (function () {
                 return values[index];
             },
             write: (value: any) => {
-                var index = self.selectedIndex();
-                if (value !== self.latestValues()[index]) {
-                    if (index !== self.latestValues.size() - 1) {
-                        self.latestValues.splice(index + 1);
+                const
+                    index = self.selectedIndex(),
+                    values = self.latestValues();
+
+                if (value !== values[index]) {
+                    if (index !== values.length - 1) {
+                        values.splice(index + 1);
                     }
 
-                    self.latestValues.push(value);
+                    values.push(value);
                     self.selectedIndex(index + 1);
                 }
             }
@@ -75,19 +78,19 @@ export var history: KnockoutHistoryObservableStatic = (function () {
             if (this.canGoBack()) {
                 this.selectedIndex(this.selectedIndex() - 1);
             }
+
             return this();
         },
         next: function () {
             if (this.canGoNext()) {
                 this.selectedIndex(this.selectedIndex() + 1);
             }
+
             return this();
         },
         replace: function (value: any): void {
-            var superNotify = ko.subscribable.fn.notifySubscribers.bind(this),
-                oldValue = this();
+            const index = this.selectedIndex();
 
-            var index = this.selectedIndex();
             this.latestValues.valueWillMutate();
             this.latestValues()[index] = value;
             this.latestValues.valueHasMutated();
@@ -96,7 +99,9 @@ export var history: KnockoutHistoryObservableStatic = (function () {
             if (!value)
                 value = this();
 
-            this.latestValues.splice(0, this.latestValues().length, value);
+            const values = this.latestValues();
+            values.splice(0, values.length, value);
+
             this.selectedIndex(0);
         }
     };
