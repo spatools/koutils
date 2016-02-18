@@ -52,3 +52,14 @@ extenders.cthrottle = function (target: any, timeout: number): any {
     target.throttleEvaluation = timeout;
     return target;
 };
+
+ko.extenders.sync = function (target: any) {
+    if (target._origNotifySubscribers) {
+        target.notifySubscribers = target._origNotifySubscribers;
+    }
+    else if (target.limit && target._deferUpdates) {
+        target.limit(cb => cb);
+    }
+
+    return target;
+};

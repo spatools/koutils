@@ -26,7 +26,8 @@ interface KnockoutComputed<T> {
 interface KnockoutExtenders {
     delay: (target: any, delay: number) => any;
     cthrottle: (target: any, timeout: number) => any;
-    //notify: (target: any, notifyWhen: string, customEqualityComparer: (v1: any, v2: any) => number) => any;
+    sync: (target: any) => any;
+    // notify: (target: any, notifyWhen: string | ((v1: any, v2: any) => number)) => any;
 }
 
 interface KnockoutBindingHandlers {
