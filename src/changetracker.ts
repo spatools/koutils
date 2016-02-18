@@ -13,8 +13,10 @@ class ChangeTracker {
         object: any,
         isAlreadyModified: boolean = false,
         private hashFunction: (obj: any, params?: any) => string = ko.toJSON,
-        private params?: any) {
-
+        private params?: any
+    ) {
+            processTasks();
+            
             this.tracked = object;
             this.lastData = ko.observable(hashFunction(object, params));
             this.isModified = ko.observable(isAlreadyModified);
@@ -29,6 +31,7 @@ class ChangeTracker {
     }
 
     public reset() {
+        processTasks();
         this.lastData(this.hashFunction(this.tracked, this.params));
         this.isModified(false);
     }
@@ -44,6 +47,10 @@ class ChangeTracker {
         this.params = null;
         this.hashFunction = null;
     }
+}
+
+function processTasks() {
+    (<any>ko).tasks && (<any>ko).tasks.runEarly();
 }
 
 export = ChangeTracker;
