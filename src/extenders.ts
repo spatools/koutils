@@ -2,10 +2,10 @@
 
 import ko = require("knockout");
 
-var extenders = <any>ko.extenders;
+const extenders = <any>ko.extenders;
 
 extenders.delay = function (target: any, delay: number): any {
-    var value = target();
+    const value = target();
 
     target.timer = null;
     target.immediate = ko.observable(value);
@@ -53,7 +53,7 @@ extenders.cthrottle = function (target: any, timeout: number): any {
     return target;
 };
 
-ko.extenders.sync = function (target: any) {
+ko.extenders.sync = function (target: any): any {
     if (target._origNotifySubscribers) {
         target.notifySubscribers = target._origNotifySubscribers;
     }

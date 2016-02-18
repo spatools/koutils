@@ -26,7 +26,8 @@ interface KnockoutComputed<T> {
 interface KnockoutExtenders {
     delay: (target: any, delay: number) => any;
     cthrottle: (target: any, timeout: number) => any;
-    //notify: (target: any, notifyWhen: string, customEqualityComparer: (v1: any, v2: any) => number) => any;
+    sync: (target: any) => any;
+    // notify: (target: any, notifyWhen: string | ((v1: any, v2: any) => number)) => any;
 }
 
 interface KnockoutBindingHandlers {
@@ -126,46 +127,26 @@ export interface ObservablePosition {
     left: KnockoutObservable<number>;
 }
 export var isIE: number;
-/** Create value accessor for custom bindings. */
 export function createAccessor<T>(value: T): () => T;
-/** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
 export function createObservable<T>(value: any, _default?: T): KnockoutObservable<T>;
-/** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
 export function createObservableArray(value: any, mapFunction?: (obj: any) => any, context?: any): KnockoutObservableArray<any>;
-/** Test if value is of the specified type. */
 export function is(obj: any, type: string): boolean;
-/** Test if value is of one of the specified types. */
 export function isOf(obj: any, ...types: string[]): boolean;
-/** Test if value is an object. */
 export function isObject(obj: any): boolean;
-/** Test if value is a date. */
 export function isDate(value: string): boolean;
-/** Test if value is null or undefined. */
 export function isNullOrUndefined(value: any): boolean;
-/** Test if value is null or a white space. */
 export function isNullOrWhiteSpace(value: string): boolean;
-/** Make inheritance operation. */
 export function inherits(obj: any, base: any, prototype: any): any;
-/** Execute callback methods in a safe DOM modification environment. Usefull when creating HTML5 Application. */
 export function unsafe<T>(callback: () => T): T;
-/** Get current window size. */
 export function getWindowSize(): Size;
-/** Check if node is in DOM */
 export function isNodeInDOM(node: Node): boolean;
-/** Get query strings. If a key is specified, returns only query string for specified key. */
 export function getQueryString(key: string): any;
-/** Format text by using a format template */
 export function format(text: string, ...args: any[]): string;
-/** Fill given text with given char while text length < given length */
 export function str_pad(text: string, length: number, char: string, right?: boolean): string;
 export interface ArrayComparison {
     added: any[];
     removed: any[];
 }
-/**
- * Take the difference between one array and a number of other arrays.
- * Only the elements present in just the first array will remain.
- **/
 export function arrayDiff(array: any[], ...others: any[]): any[];
 export function arrayCompare(array1: any[], array2: any[]): ArrayComparison;
 export function arrayEquals(array1: any[], array2: any[]): boolean;

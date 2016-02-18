@@ -16,7 +16,7 @@ class ChangeTracker {
         private params?: any
     ) {
             processTasks();
-            
+
             this.tracked = object;
             this.lastData = ko.observable(hashFunction(object, params));
             this.isModified = ko.observable(isAlreadyModified);

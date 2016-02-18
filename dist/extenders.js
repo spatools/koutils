@@ -1,4 +1,3 @@
-/// <reference path="../_definitions.d.ts" />
 define(["require", "exports", "knockout"], function (require, exports, ko) {
     var extenders = ko.extenders;
     extenders.delay = function (target, delay) {
@@ -32,7 +31,6 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
                 target.equalityComparer = function (a, b) { return a === b; };
                 break;
             default:
-                //case "primitive":
                 target.equalityComparer = ko.observable.fn.equalityComparer;
                 break;
         }
@@ -40,6 +38,15 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
     };
     extenders.cthrottle = function (target, timeout) {
         target.throttleEvaluation = timeout;
+        return target;
+    };
+    ko.extenders.sync = function (target) {
+        if (target._origNotifySubscribers) {
+            target.notifySubscribers = target._origNotifySubscribers;
+        }
+        else if (target.limit && target._deferUpdates) {
+            target.limit(function (cb) { return cb; });
+        }
         return target;
     };
 });

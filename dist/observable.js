@@ -1,4 +1,3 @@
-/// <reference path="../_definitions.d.ts" />
 define(["require", "exports", "knockout", "./purifier", "./utils"], function (require, exports, ko, purifier, utils) {
     exports.history = (function () {
         var historyObservable = function (initialValue) {
@@ -95,11 +94,8 @@ define(["require", "exports", "knockout", "./purifier", "./utils"], function (re
         return obs;
     }
     exports.simulated = simulated;
-    //#endregion
-    //#region Async Computed
     function asyncComputed(evaluator, options) {
         return purifier.unpromise(evaluator, options);
     }
     exports.asyncComputed = asyncComputed;
 });
-//#endregion

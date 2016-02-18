@@ -15,7 +15,6 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
                 disposable = null;
             }
         }
-        // Should we start in the awake state? 
         if (pureComputed.getSubscriptionsCount("change") !== 0) {
             wake();
         }
@@ -52,7 +51,6 @@ define(["require", "exports", "knockout"], function (require, exports, ko) {
             return { controlsDescendantBindings: true };
         },
         update: function (element, valueAccessor) {
-            // Unwrap recursively - so binding can be to an array, etc.
             ko.toJS(valueAccessor());
         }
     };
