@@ -8,7 +8,7 @@ requirejs.config({
     //baseUrl: "../",
 
     paths: {
-        "knockout": "../bower_components/knockoutjs/dist/knockout.debug",
+        "knockout": "../bower_components/knockout/dist/knockout.debug",
 
         "mocha": "../bower_components/mocha/mocha",
         "should": "../bower_components/should/should",
