@@ -6,6 +6,7 @@ class ChangeTracker {
     private tracked: any;
     private lastData: KnockoutObservable<string>;
     private isModified: KnockoutObservable<boolean>;
+    private isWaiting: KnockoutObservable<boolean>;
 
     public hasChanges: KnockoutComputed<boolean>;
 
@@ -15,14 +16,15 @@ class ChangeTracker {
         private hashFunction: (obj: any, params?: any) => string = ko.toJSON,
         private params?: any
     ) {
-            processTasks();
-
             this.tracked = object;
-            this.lastData = ko.observable(hashFunction(object, params));
+            this.lastData = ko.observable<string>();
             this.isModified = ko.observable(isAlreadyModified);
 
+            this.isWaiting = ko.observable(!!(<any>ko).tasks);
+            this.setLastData();
+
             this.hasChanges = ko.computed<boolean>(function () {
-                return this.isModified() || this.hashFunction(this.tracked, this.params) !== this.lastData();
+                return this.isModified() || (!this.isWaiting() && this.getHash() !== this.lastData());
             }, this);
     }
 
@@ -31,8 +33,7 @@ class ChangeTracker {
     }
 
     public reset() {
-        processTasks();
-        this.lastData(this.hashFunction(this.tracked, this.params));
+        this.setLastData();
         this.isModified(false);
     }
 
@@ -47,10 +48,24 @@ class ChangeTracker {
         this.params = null;
         this.hashFunction = null;
     }
-}
 
-function processTasks() {
-    (<any>ko).tasks && (<any>ko).tasks.runEarly();
+    private getHash() {
+        return this.hashFunction(this.tracked, this.params);
+    }
+
+    private setLastData() {
+        if (!(<any>ko).tasks) {
+            this.lastData(this.getHash());
+            return;
+        }
+
+        this.isWaiting(true);
+
+        (<any>ko).tasks.schedule(() => {
+            this.lastData(this.getHash());
+            this.isWaiting(false);
+        });
+    }
 }
 
 export = ChangeTracker;
