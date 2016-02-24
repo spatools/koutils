@@ -41,11 +41,14 @@ class ChangeTracker {
     private tracked;
     private lastData;
     private isModified;
+    private isWaiting;
     hasChanges: KnockoutComputed<boolean>;
     constructor(object: any, isAlreadyModified?: boolean, hashFunction?: (obj: any, params?: any) => string, params?: any);
     forceChange(): void;
     reset(): void;
     dispose(): void;
+    private getHash();
+    private setLastData();
 }
 export = ChangeTracker;
 }
