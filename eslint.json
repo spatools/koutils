@@ -1,0 +1,23 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "amd": true,
+    "mocha": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+      "no-unused-vars": [2, { "argsIgnorePattern": "^(exports)$" }],
+      "no-func-assign": [0]
+  },
+  "globals": {
+      "Symbol": true,
+      "MSApp": true,
+      "Globalize": true,
+      "requirejs": true
+  }
+}

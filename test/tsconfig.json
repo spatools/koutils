@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd"
+    },
+    "files": [
+        "_references.d.ts",
+        "helpers/common.ts",
+        "changetracker.ts",
+        "config.ts",
+        "extenders.ts",
+        "utils.ts"
+    ]
+}

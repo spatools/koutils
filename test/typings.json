@@ -1,0 +1,8 @@
+{
+  "ambientDevDependencies": {
+    "mocha": "registry:dt/mocha#2.2.5+20160317120654",
+    "requirejs": "github:typed-contrib/requirejs/global/typings.json#351aee1093083c1357f06b0fb5e9abb520537140",
+    "should": "registry:dt/should#8.1.1+20160316155526",
+    "sinon": "registry:dt/sinon#1.16.0+20160317120654"
+  }
+}

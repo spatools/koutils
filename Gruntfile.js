@@ -25,83 +25,40 @@ module.exports = function (grunt) {
 
         ts: {
             options: {
-                target: "es3",
-                module: "amd",
-                sourceMap: false,
+                target: "es5",
+                module: "umd",
                 declaration: false,
-                comments: false,
+                sourceMap: true,
+                comments: true,
                 disallowbool: true,
                 disallowimportmodule: true
             },
             dev: {
-                src: "<%= paths.src %>/**/*.ts",
-                options: {
-                    sourceMap: true
-                }
+                src: ["_references.d.ts", "<%= paths.src %>/**/*.ts"]
             },
             test: {
-                src: "<%= paths.test %>/**/*.ts"
-            },
-            decla: {
-                src: "<%= paths.src %>/**/*.ts",
-                dest: "<%= paths.temp %>/",
-                options: {
-                    rootDir: '<%= paths.src %>',
-                    declaration: true
-                }
+                src: ["<%= paths.test %>/_references.d.ts" , "<%= paths.test %>/**/*.ts", "!<%= paths.test %>/typings/**/*.d.ts"]
             },
             dist: {
-                src: "<%= paths.src %>/**/*.ts",
+                src: "<%= ts.dev.src %>",
                 dest: "<%= paths.build %>/",
                 options: {
-                    rootDir: '<%= paths.src %>'
+                    rootDir: '<%= paths.src %>',
+                    declaration: true,
+                    sourceMap: false
                 }
             }
         },
 
-        concat: {
-            decla: {
-                src: [
-                    "<%= paths.src %>/base.d.ts",
-                    "<%= paths.temp %>/temp.d.ts"
-                ],
-                dest: "<%= paths.build %>/koutils.d.ts"
-            }
-        },
-
-        tsdamdconcat: {
+        eslint: {
             options: {
-                removeReferences: true,
-                basePath: "<%= paths.temp %>",
-                prefixPath: "koutils"
-            },
-            decla: {
-                src: "<%= paths.temp %>/*.d.ts",
-                dest: "<%= paths.temp %>/temp.d.ts"
-            }
-        },
-
-        jshint: {
-            options: {
-                jshintrc: "jshint.json",
+                configFile: "eslint.json",
             },
 
             base: ["*.js"],
             dev: ["<%= paths.src %>/**/*.js"],
             dist: ["<%= paths.build %>/**/*.js"],
             test: ["<%= paths.test %>/**/*.js"]
-        },
-
-        tslint: {
-            options: {
-                configuration: grunt.file.readJSON("tslint.json")
-            },
-            dev: {
-                src: "<%= paths.src %>/**/*.ts"
-            },
-            test: {
-                src: "<%= paths.test %>/**/*.ts"
-            }
         },
 
         connect: {
@@ -119,19 +76,14 @@ module.exports = function (grunt) {
         },
 
         clean: {
-            dev: [
-                "<%= paths.src %>/**/*.d.ts",
-                "!<%= paths.src %>/base.d.ts",
-                "<%= paths.src %>/**/*.js",
-                "<%= paths.src %>/**/*.js.map"
-            ],
+            dist: "<%= paths.build %>",
+            temp: "<%= paths.temp %>",
+            dev: "<%= paths.src %>/**/*.{js,js.map,d.ts}",
             test: [
-                "<%= paths.test %>/**/*.d.ts",
-                "<%= paths.test %>/**/*.js",
-                "<%= paths.test %>/**/*.js.map"
-            ],
-            temp: [
-                "<%= paths.temp %>/**/*.*"
+                "<%= clean.dev %>",
+                "<%= paths.test %>/**/*.{js,js.map,d.ts}",
+                "!<%= paths.test %>/typings/**/*.d.ts",
+                "!<%= paths.test %>/_references.d.ts"
             ]
         },
 
@@ -152,13 +104,9 @@ module.exports = function (grunt) {
         },
 
         watch: {
-            tslint: {
-                files: ['<%= tslint.dev.src %>'],
-                tasks: ['tslint:dev']
-            },
-            jshint: {
-                files: ['<%= jshint.dev.src %>'],
-                tasks: ['jshint:dev']
+            eslint: {
+                files: ['<%= eslint.dev.src %>'],
+                tasks: ['eslint:dev']
             },
             test: {
                 files: ['<%= paths.test %>/*.*'],
@@ -176,10 +124,9 @@ module.exports = function (grunt) {
         grunt.file.write("dist/koutils.d.ts", content);
     });
 
-    grunt.registerTask("decla", ["ts:decla", "tsdamdconcat:decla", "concat:decla", "fixdecla", "clean:temp"]);
-    grunt.registerTask("build", ["tslint:dev", "ts:dist", "jshint:dist", "decla"]);
-    grunt.registerTask("dev", ["tslint:dev", "ts:dev", "jshint:dev"]);
-    grunt.registerTask("test", ["dev", "tslint:test", "ts:test", "jshint:test", "mocha:test", "clean"]);
+    grunt.registerTask("build", ["clean:dist", "ts:dist", "eslint:dist"]);
+    grunt.registerTask("dev", ["clean:dev", "ts:dev", "eslint:dev"]);
+    grunt.registerTask("test", ["clean:test", "ts:test", "eslint:test", "mocha:test"]);
     grunt.registerTask("nuget", ["nugetpack", "nugetpush"]);
 
     grunt.registerTask("default", ["clean", "test", "build"]);

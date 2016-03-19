@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "umd"
+    },
+    "files": [
+        "_references.d.ts",
+        "src/changetracker.ts",
+        "src/extenders.ts",
+        "src/observable.ts",
+        "src/purifier.ts",
+        "src/utils.ts"
+    ]
+}
