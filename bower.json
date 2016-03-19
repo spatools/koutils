@@ -28,12 +28,6 @@
     "test"
   ],
   "dependencies": {
-    "requirejs": "^2.2.0",
     "knockout": "^3.4.0"
-  },
-  "devDependencies": {
-    "mocha": "~1.17.1",
-    "should": "3.1.2",
-    "sinon": "http://sinonjs.org/releases/sinon-1.8.1.js"
   }
 }

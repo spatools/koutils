@@ -1,29 +1,18 @@
-﻿requirejs.config({
-    //baseUrl: "../",
+﻿const __karma__ = (<any>window).__karma__;
+const TEST_REGEXP = /(test)\/(.*)\.js$/i;
+const REPLACE_REGEXP = /(^\/base\/)|(\.js$)/g;
+
+require.config({
+    // Karma serves files under /base, which is the basePath from your config file
+    baseUrl: "/base",
 
     paths: {
-        "knockout": "../bower_components/knockout/dist/knockout.debug",
-
-        "mocha": "../bower_components/mocha/mocha",
-        "should": "../bower_components/should/should",
-        "sinon": "../bower_components/sinon/sinon"
+        "knockout": "bower_components/knockout/dist/knockout.debug"
     },
 
-    shim: {
-        mocha: {
-            exports: "mocha"
-        }
-    }
-});
-
-(<any>window).console = window.console || function () { return; };
-(<any>window).notrack = true;
-
-var tests = [
-    "changetracker",
-    "utils"
-];
-
-require(tests, function () {
-    mocha.run();
+    deps: Object.keys(__karma__.files)
+            .filter(file => TEST_REGEXP.test(file) && file.indexOf("config") === -1 && file.indexOf("helpers") === -1)
+            .map(file => file.replace(REPLACE_REGEXP, "")),
+    
+    callback: __karma__.start
 });

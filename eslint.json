@@ -18,6 +18,8 @@
       "Symbol": true,
       "MSApp": true,
       "Globalize": true,
-      "requirejs": true
+      "requirejs": true,
+      "should": true,
+      "sinon": true
   }
 }
