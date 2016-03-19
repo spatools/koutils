@@ -1,14 +1,13 @@
-/// <reference path="../_definitions.d.ts" />
-
-import ko = require("knockout");
+import * as ko from "knockout";
 
 class ChangeTracker {
     private tracked: any;
-    private lastData: KnockoutObservable<string>;
-    private isModified: KnockoutObservable<boolean>;
-    private isWaiting: KnockoutObservable<boolean>;
+    private shouldWait: boolean;
+    private lastData: ko.Observable<string>;
+    private isModified: ko.Observable<boolean>;
+    private isWaiting: ko.Observable<boolean>;
 
-    public hasChanges: KnockoutComputed<boolean>;
+    public hasChanges: ko.Computed<boolean>;
 
     constructor(
         object: any,
@@ -20,7 +19,8 @@ class ChangeTracker {
             this.lastData = ko.observable<string>();
             this.isModified = ko.observable(isAlreadyModified);
 
-            this.isWaiting = ko.observable(!!(<any>ko).tasks);
+            this.shouldWait = shouldWait(object);
+            this.isWaiting = ko.observable(this.shouldWait);
             this.setLastData();
 
             this.hasChanges = ko.computed<boolean>(function () {
@@ -54,14 +54,14 @@ class ChangeTracker {
     }
 
     private setLastData() {
-        if (!(<any>ko).tasks) {
+        if (!this.shouldWait) {
             this.lastData(this.getHash());
             return;
         }
 
         this.isWaiting(true);
 
-        (<any>ko).tasks.schedule(() => {
+        ko.tasks.schedule(() => {
             this.lastData(this.getHash());
             this.isWaiting(false);
         });
@@ -69,3 +69,23 @@ class ChangeTracker {
 }
 
 export = ChangeTracker;
+
+function shouldWait(obj: any): boolean {
+    if (!ko.tasks) {
+        return false;
+    }
+    
+    if (ko.options && ko.options.deferUpdates) {
+        return true;
+    }
+    
+    if (typeof obj === "object") {
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key) && ko.isComputed(obj[key]) && obj[key]._deferUpdates) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
