@@ -5,7 +5,7 @@ describe("observable", () => {
     ["history", "simulated", "validated"].forEach(obsType => {
         describe(obsType, () => {
 
-            it("should be a redirection of observable/history", () => {
+            it("should be a redirection of observable/" + obsType, () => {
                 observable[obsType].should.equal(require("../src/observable/" + obsType));
             });
 

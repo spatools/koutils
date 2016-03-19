@@ -6,6 +6,9 @@
     "files": [
         "_references.d.ts",
         "helpers/common.ts",
+        "extenders/delay.ts",
+        "extenders/notify.ts",
+        "extenders/sync.ts",
         "observable/history.ts",
         "observable/simulated.ts",
         "changetracker.ts",
