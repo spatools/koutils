@@ -1,6 +1,4 @@
-/// <reference path="../_definitions.d.ts" />
-
-import ko = require("knockout");
+import * as ko from "knockout";
 
 export interface Size {
     width: number;
@@ -18,11 +16,12 @@ export interface Position {
 }
 
 export interface ObservablePosition {
-    top: KnockoutObservable<number>;
-    left: KnockoutObservable<number>;
+    top: ko.Observable<number>;
+    left: ko.Observable<number>;
 }
 
-export var isIE = /*@cc_on!@*/0;
+export const isIE = /*@cc_on!@*/0;
+export const canUseSymbols = typeof Symbol === 'function';
 
 //#region Knockout Utilities
 
@@ -32,7 +31,7 @@ export function createAccessor<T>(value: T): () => T {
 }
 
 /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
-export function createObservable<T>(value: any, _default?: T): KnockoutObservable<T> {
+export function createObservable<T>(value: any, _default?: T): ko.Observable<T> {
     if (isNullOrUndefined(value)) {
         return ko.observable(_default);
     }
@@ -45,7 +44,7 @@ export function createObservable<T>(value: any, _default?: T): KnockoutObservabl
 }
 
 /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
-export function createObservableArray(value: any, mapFunction?: (obj: any) => any, context?: any): KnockoutObservableArray<any> {
+export function createObservableArray(value: any, mapFunction?: (obj: any) => any, context?: any): ko.ObservableArray<any> {
     if (typeof value === "undefined") {
         return ko.observableArray();
     }
@@ -59,6 +58,10 @@ export function createObservableArray(value: any, mapFunction?: (obj: any) => an
     }
 
     return ko.observableArray(value);
+}
+
+export function createSymbol(identifier: string): symbol | string {
+    return canUseSymbols ? Symbol(identifier) : identifier;
 }
 
 //#endregion
@@ -212,7 +215,7 @@ export function format(text: string, ...args: any[]): string {
                 case "u":
                     return value.toString().toLowerCase();
                 default:
-                    if (window.Globalize) {
+                    if (typeof Globalize !== "undefined") {
                         return Globalize.format(value, match[4]);
                     }
                     break;
@@ -258,7 +261,7 @@ export function arrayDiff(array: any[], ...others: any[]): any[] {
 export function arrayCompare(array1: any[], array2: any[]): ArrayComparison {
     return {
         added: arrayDiff(array2, array1),
-        removed: arrayDiff(array1, array2),
+        removed: arrayDiff(array1, array2)
     };
 }
 
