@@ -9,6 +9,7 @@
         "changetracker.ts",
         "config.ts",
         "extenders.ts",
+        "observable.ts",
         "utils.ts"
     ]
 }

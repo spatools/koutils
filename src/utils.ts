@@ -161,6 +161,10 @@ export function getWindowSize(): Size {
 
 /** Check if node is in DOM */
 export function isNodeInDOM(node: Node): boolean {
+    if (!node) {
+        return false;
+    }
+    
     var ancestor = node;
 
     while (ancestor.parentNode) {

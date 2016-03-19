@@ -2,7 +2,7 @@
 
 import * as ko from "knockout";
 import * as purifier from "./purifier";
-import * as utils from "utils";
+import * as utils from "./utils";
 
 //#region History Observable
 
@@ -11,7 +11,7 @@ export interface HistoryObservable<T> extends ko.PureComputed<T> {
     selectedIndex: ko.Observable<number>;
 
     canGoBack: ko.PureComputed<boolean>;
-    canGoForward: ko.PureComputed<boolean>;
+    canGoNext: ko.PureComputed<boolean>;
     
     back(): T;
     next(): T;
@@ -19,7 +19,7 @@ export interface HistoryObservable<T> extends ko.PureComputed<T> {
     reset(value?: T): void;
 }
 
-export function history<T>(initialValue: T): HistoryObservable<T> {
+export function history<T>(initialValue?: T): HistoryObservable<T> {
     const self = {
         latestValues: ko.observableArray([initialValue]),
         selectedIndex: ko.observable(0),
@@ -57,6 +57,13 @@ export function history<T>(initialValue: T): HistoryObservable<T> {
     }).extend({ notify: "reference" });
 
     ko.utils.extend(result, self);
+    
+    const oldDispose = result.dispose;
+    result.dispose = function() {
+        oldDispose.call(this);
+        this.canGoBack.dispose();
+        this.canGoNext.dispose();
+    };
 
     return result;
 }
@@ -87,10 +94,7 @@ export module history {
             this.latestValues.valueHasMutated();
         }
         
-        export function reset(value?: any): void {
-            if (!value)
-                value = this();
-
+        export function reset(value: any = this()): void {
             const values = this.latestValues();
             this.latestValues.splice(0, values.length, value);
 
@@ -181,8 +185,8 @@ export function validated<T>(initialValue: T): ValidatedObservable<T> {
 
 //#region Simulated Observable
 
-export function simulated<T>(element: Element, getter: () => T): ko.Observable<T> {
-    const item = simulated.add(element, getter);
+export function simulated<T>(element: Element, getter: (element: Element) => T, owner?: any): simulated.SimulatedObservable<T> {
+    const item = simulated.add<T>(element, owner ? getter.bind(owner) : getter);
     return item.observable;
 }
 
@@ -192,17 +196,24 @@ export module simulated {
         items: SimulatedItems<any>[] = [];
 
    export interface SimulatedItems<T> {
-        observable: ko.Observable<T>;
-        getter: () => T;
+        observable: SimulatedObservable<T>;
+        getter: (element: Element) => T;
         element: Element;
+        dispose(): void;
     }
 
-    export function add<T>(element: Element, getter: () => T): SimulatedItems<T> {
-        const item = { 
-            observable: ko.observable(getter()), 
-            getter, element 
-        };
+    export interface SimulatedObservable<T> extends ko.Observable<T> {
+        dispose();
+    }
 
+    export function add<T>(element: Element, getter: (element: Element) => T): SimulatedItems<T> {
+        const item = { 
+            observable: ko.observable(getter(element)) as SimulatedObservable<T>, 
+            getter, element, dispose
+        };
+        
+        item.observable.dispose = item.dispose.bind(item);
+        
         items.push(item);
 
         if (timer === null) {
@@ -210,6 +221,18 @@ export module simulated {
         }
         
         return item;
+        
+        function dispose() {
+            const i = items.indexOf(this);
+            if (i === -1) { return; }
+            
+            items.splice(i, 1);
+                
+            if (timer !== null && items.length === 0) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
     }
     
     function check() {
@@ -221,7 +244,7 @@ export module simulated {
             return;
         }
 
-        items.forEach(item => { item.observable(item.getter()); });
+        items.forEach(item => { item.observable(item.getter(item.element)); });
     }
 }
 
