@@ -1,34 +1,74 @@
-﻿/// <reference path="../_definitions.d.ts" />
+﻿import * as ko from "knockout";
+import { createSymbol } from "./utils";
 
-import ko = require("knockout");
+type ObservableOrComputed<T> = ko.Observable<T> | ko.Computed<T>;
+export interface DelayedObservable<T> {
+    immediate: ko.Observable<T>;
+    dispose(): void;
+} 
 
-const extenders = <any>ko.extenders;
+declare module "knockout" {
+    export interface Extenders {
+        delay<T>(target: ko.Subscribable<T>, delay: number): typeof target & DelayedObservable<T>;
+        sync<T>(target: ko.Subscribable<T>): typeof target;
+    }
+}
 
-extenders.delay = function (target: any, delay: number): any {
-    const value = target();
+const extenders = ko.extenders;
 
-    target.timer = null;
-    target.immediate = ko.observable(value);
+extenders.delay = function <T>(target: ko.Subscribable<T>, delay: number): typeof target & DelayedObservable<T> {
+    const 
+        timerProp = createSymbol("timer"),
+        subsProp = createSymbol("subs"),
+        disposeProp = createSymbol("oldDispose"),
+        t = target as typeof target & DelayedObservable<T>,
+        subs = [];
+    
+    t[subsProp] = subs;
+    t[disposeProp] = t.dispose;
+    
+    t.immediate = ko.observable(target());
+    t.dispose = dispose;
 
-    target.subscribe(target.immediate);
-    target.immediate.subscribe(function (newValue) {
-        if (newValue !== target()) {
-            if (target.timer) {
-                clearTimeout(target.timer);
+    subs.push(t.subscribe(t.immediate));
+    subs.push(t.immediate.subscribe(onImmediateChanged));
+
+    return t;
+    
+    function onImmediateChanged(newValue: T) {
+        if (newValue !== t()) {
+            if (t[timerProp]) {
+                clearTimeout(t[timerProp]);
             }
 
-            target.timer = setTimeout(() => target(newValue), delay);
+            t[timerProp] = setTimeout(() => target(newValue), delay);
         }
-    });
-
-    return target;
+    }
+    
+    function dispose() {
+        if (t.immediate) {
+            t.immediate = null;
+        }
+        
+        if (t[subsProp]) {
+            t[subsProp].forEach(sub => { sub.dispose(); });
+            t[subsProp] = null;
+        }
+        
+        if (t[disposeProp]) {
+            t[disposeProp].call(t);
+            t.dispose = t[disposeProp];
+            t[disposeProp] = null;
+        }
+    }
 };
 
-extenders.notify = function (target: any, notifyWhen: any): any {
+extenders.notify = function <T>(target: ObservableOrComputed<T>, notifyWhen: string | ((a: T, b: T) => boolean)): typeof target {
     if (typeof notifyWhen === "function") { // custom
         target.equalityComparer = notifyWhen;
         return target;
     }
+    
     switch (notifyWhen) {
         case "always":
             target.equalityComparer = () => false;
@@ -48,17 +88,13 @@ extenders.notify = function (target: any, notifyWhen: any): any {
     return target;
 };
 
-extenders.cthrottle = function (target: any, timeout: number): any {
-    target.throttleEvaluation = timeout;
-    return target;
-};
-
-ko.extenders.sync = function (target: any): any {
-    if (target._origNotifySubscribers) {
-        target.notifySubscribers = target._origNotifySubscribers;
+ko.extenders.sync = function <T>(target: ko.Subscribable<T>): typeof target {
+    
+    if (target["_origNotifySubscribers"]) {
+        target.notifySubscribers = target["_origNotifySubscribers"];
     }
-    else if (target.limit && target._deferUpdates) {
-        target.limit(cb => cb);
+    else if (target["limit"] && target["_deferUpdates"]) {
+        target["limit"](cb => cb);
     }
 
     return target;
