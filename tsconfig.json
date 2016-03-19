@@ -5,6 +5,9 @@
     },
     "files": [
         "_references.d.ts",
+        "src/observable/history.ts",
+        "src/observable/simulated.ts",
+        "src/observable/validated.ts",
         "src/changetracker.ts",
         "src/extenders.ts",
         "src/observable.ts",

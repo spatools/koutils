@@ -271,7 +271,7 @@ describe("observable", () => {
 
     describe("simulated", () => {
         let div: HTMLDivElement;
-        let simu: observable.simulated.SimulatedObservable<any>;
+        let simu: observable.SimulatedObservable<any>;
         
         beforeEach(() => {
             div = document.createElement("div");
