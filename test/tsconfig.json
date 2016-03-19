@@ -6,6 +6,8 @@
     "files": [
         "_references.d.ts",
         "helpers/common.ts",
+        "observable/history.ts",
+        "observable/simulated.ts",
         "changetracker.ts",
         "config.ts",
         "extenders.ts",
