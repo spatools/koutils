@@ -1,101 +1,93 @@
-﻿/// <reference path="../_definitions.d.ts" />
+﻿/*eslint no-unused-vars: [0], no-redeclare: [0] */
 
-import ko = require("knockout");
-import purifier = require("./purifier");
-import utils = require("./utils");
+import * as ko from "knockout";
+import * as purifier from "./purifier";
+import * as utils from "utils";
 
 //#region History Observable
 
-export interface KnockoutHistoryObservableStatic {
-    fn: KnockoutHistoryObservableFunctions<any>;
-    <T>(initialValue: T): KnockoutHistoryObservable<T>;
-}
+export interface HistoryObservable<T> extends ko.PureComputed<T> {
+    latestValues: ko.ObservableArray<T>;
+    selectedIndex: ko.Observable<number>;
 
-export interface KnockoutHistoryObservableFunctions<T> {
+    canGoBack: ko.PureComputed<boolean>;
+    canGoForward: ko.PureComputed<boolean>;
+    
     back(): T;
     next(): T;
     replace(value: T): void;
     reset(value?: T): void;
 }
 
-export interface KnockoutHistoryObservable<T> extends KnockoutHistoryObservableFunctions<T> {
-    (): T;
-    (value: T): KnockoutHistoryObservable<T>;
-
-    latestValues: KnockoutObservableArray<T>;
-    selectedIndex: KnockoutObservable<number>;
-
-    canGoBack: KnockoutComputed<boolean>;
-    canGoForward: KnockoutComputed<boolean>;
-}
-
-export var history: KnockoutHistoryObservableStatic = (function () {
-    var historyObservable: any = function <T>(initialValue: T): KnockoutHistoryObservable<T> {
-        var self: any = {
-            latestValues: ko.observableArray([initialValue]),
-            selectedIndex: ko.observable(0)
-        };
-
-        self.canGoBack = ko.pureComputed(() => self.selectedIndex() > 0);
-        self.canGoNext = ko.pureComputed(() => self.selectedIndex() < self.latestValues().length - 1);
-
-        ko.utils.extend(self, historyObservable.fn);
-
-        var result: any = ko.pureComputed({
-            read: () => {
-                const values = self.latestValues();
-                let index = self.selectedIndex();
-
-                if (index > values.length) {
-                    index = 0;
-                }
-
-                return values[index];
-            },
-            write: (value: any) => {
-                const
-                    index = self.selectedIndex(),
-                    values = self.latestValues();
-
-                if (value !== values[index]) {
-                    if (index !== values.length - 1) {
-                        values.splice(index + 1);
-                    }
-
-                    values.push(value);
-                    self.selectedIndex(index + 1);
-                }
-            }
-        }).extend({ notify: "reference" });
-
-        ko.utils.extend(result, self);
-
-        return result;
+export function history<T>(initialValue: T): HistoryObservable<T> {
+    const self = {
+        latestValues: ko.observableArray([initialValue]),
+        selectedIndex: ko.observable(0),
+        canGoBack: ko.pureComputed(() => self.selectedIndex() > 0),
+        canGoNext: ko.pureComputed(() => self.selectedIndex() < self.latestValues().length - 1)
     };
 
-    historyObservable.fn = {
-        back: function () {
+    ko.utils.extend(self, history.fn);
+
+    const result: any = ko.pureComputed({
+        read: () => {
+            const values = self.latestValues();
+            let index = self.selectedIndex();
+
+            if (index > values.length) {
+                index = 0;
+            }
+
+            return values[index];
+        },
+        write: (value: any) => {
+            const
+                index = self.selectedIndex(),
+                values = self.latestValues();
+
+            if (value !== values[index]) {
+                if (index !== values.length - 1) {
+                    values.splice(index + 1);
+                }
+
+                values.push(value);
+                self.selectedIndex(index + 1);
+            }
+        }
+    }).extend({ notify: "reference" });
+
+    ko.utils.extend(result, self);
+
+    return result;
+}
+
+export module history {
+    export module fn {
+        export function back() {
             if (this.canGoBack()) {
                 this.selectedIndex(this.selectedIndex() - 1);
             }
 
             return this();
-        },
-        next: function () {
+        }
+        
+        export function next() {
             if (this.canGoNext()) {
                 this.selectedIndex(this.selectedIndex() + 1);
             }
 
             return this();
-        },
-        replace: function (value: any): void {
+        }
+        
+        export function replace(value: any): void {
             const index = this.selectedIndex();
 
             this.latestValues.valueWillMutate();
             this.latestValues()[index] = value;
             this.latestValues.valueHasMutated();
-        },
-        reset: function (value?: any): void {
+        }
+        
+        export function reset(value?: any): void {
             if (!value)
                 value = this();
 
@@ -104,105 +96,140 @@ export var history: KnockoutHistoryObservableStatic = (function () {
 
             this.selectedIndex(0);
         }
-    };
-
-    return historyObservable;
-})();
+    }
+}
 
 //#endregion
 
 //#region Validated Observable
 
-export interface KnockoutValidatedRule {
+export interface ValidatedRule {
     rule: string;
     params: any;
     message?: string;
     condition?: () => boolean;
 }
 
-export interface KnockoutValidatedErrors {
+export interface ValidatedErrors {
     (): string[];
     showAllMessages(): void;
     showAllMessages(show: boolean): void;
 }
 
-export interface KnockoutValidatedObservable<T> extends KnockoutObservable<T> {
-    isValid: KnockoutComputed<boolean>;
+export interface ValidatedObservable<T> extends ko.Observable<T> {
+    isValid: ko.PureComputed<boolean>;
     error?: string;
-    errors?: KnockoutValidatedErrors;
+    errors?: ValidatedErrors;
 
-    isValidating?: KnockoutObservable<boolean>;
-    isModified?: KnockoutObservable<boolean>;
-    rules?: KnockoutObservableArray<KnockoutValidatedRule>;
+    isValidating?: ko.Observable<boolean>;
+    isModified?: ko.Observable<boolean>;
+    rules?: ko.ObservableArray<ValidatedRule>;
 
     _disposeValidation? (): void;
+    dispose(): void;
 }
 
-export function validated<T>(initialValue: T): KnockoutValidatedObservable<T> {
-    var obsv: any = ko.observable<T>(initialValue),
-        isValid = ko.observable(true),
-        subscription: KnockoutSubscription;
-
-    obsv.subscribe(function (newValue) {
+export function validated<T>(initialValue: T): ValidatedObservable<T> {
+    const
+        errorSubProp = utils.createSymbol("errorSub"),
+        globalSubProp = utils.createSymbol("globalSub"),
+        
+        obsv: any = ko.observable<T>(initialValue),
+        isValid = ko.observable(true);
+    
+    obsv[globalSubProp] = obsv.subscribe(onValueChanged);
+    onValueChanged(initialValue);
+    
+    obsv.isValid = ko.pureComputed(isValid);
+    
+    return obsv;
+    
+    function onValueChanged(newValue: T) {
         obsv.errors = (<any>ko).validation.group(newValue || {});
         isValid(obsv.errors().length === 0);
-
-        subscription.dispose();
-        subscription = obsv.errors.subscribe((errors: string[]) => isValid(errors.length === 0));
-    });
-
-    obsv.errors = (<any>ko).validation.group(initialValue || {});
-    isValid(obsv.errors().length === 0);
-
-    obsv.isValid = ko.pureComputed(isValid);
-    subscription = obsv.errors.subscribe((errors: string[]) => isValid(errors.length === 0));
-
-    return obsv;
+        
+        if (obsv[errorSubProp]) {
+            obsv[errorSubProp].dispose();
+        }
+        
+        obsv[errorSubProp] = obsv.errors.subscribe(onErrorsChanged);
+    }
+    
+    function onErrorsChanged(errors: string[]) {
+        isValid(errors.length === 0);
+    }
+    
+    function dispose() {
+        if (obsv[globalSubProp]) {
+            obsv[globalSubProp].dispose();
+            obsv[globalSubProp] = null;
+        }
+        
+        if (obsv[errorSubProp]) {
+            obsv[errorSubProp].dispose();
+            obsv[errorSubProp] = null;
+        }
+        
+        if (obsv.isValid) {
+            obsv.isValid.dispose();
+            obsv.isValid = null;
+        }
+    }
 }
 
 //#endregion
 
 //#region Simulated Observable
 
-interface SimulatedItems<T> {
-    observable: KnockoutObservable<T>;
-    getter: () => T;
-    element: Element;
+export function simulated<T>(element: Element, getter: () => T): ko.Observable<T> {
+    const item = simulated.add(element, getter);
+    return item.observable;
 }
 
-var timer: any = null,
-    items: SimulatedItems<any>[] = [];
+export module simulated {
+    let 
+        timer = null,
+        items: SimulatedItems<any>[] = [];
 
-function check() {
-    items = items.filter(item => utils.isNodeInDOM(item.element));
-
-    if (items.length === 0) {
-        clearInterval(timer);
-        timer = null;
-        return;
+   export interface SimulatedItems<T> {
+        observable: ko.Observable<T>;
+        getter: () => T;
+        element: Element;
     }
 
-    items.forEach(item => { item.observable(item.getter()); });
-}
+    export function add<T>(element: Element, getter: () => T): SimulatedItems<T> {
+        const item = { 
+            observable: ko.observable(getter()), 
+            getter, element 
+        };
 
-export function simulated<T>(element: Element, getter: () => T): KnockoutObservable<T> {
-    var obs = ko.observable(getter());
+        items.push(item);
 
-    items.push({ observable: obs, getter: getter, element: element });
-
-    if (timer === null) {
-        timer = setInterval(check, 100);
+        if (timer === null) {
+            timer = setInterval(check, 100);
+        }
+        
+        return item;
     }
+    
+    function check() {
+        items = items.filter(item => utils.isNodeInDOM(item.element));
 
-    return obs;
+        if (items.length === 0) {
+            clearInterval(timer);
+            timer = null;
+            return;
+        }
 
+        items.forEach(item => { item.observable(item.getter()); });
+    }
 }
 
 //#endregion
 
 //#region Async Computed
 
-export function asyncComputed<T>(evaluator: () => KoUtils.Thenable<T>|any, options?: purifier.UnpromiseOptions<T>): KnockoutComputed<T> {
+export function asyncComputed<T>(evaluator: () => T | purifier.Thenable<T>, options?: purifier.UnpromiseOptions<T>): ko.PureComputed<T> {
     return purifier.unpromise<T>(evaluator, options);
 }
 
