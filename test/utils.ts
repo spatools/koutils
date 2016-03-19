@@ -1,11 +1,6 @@
-﻿//// <reference path="../_definitions.d.ts" />
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/should/should.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-
-import ko = require("knockout");
-import utils = require("../src/utils");
-import commonHelpers = require("./helpers/common");
+﻿import * as ko from "knockout";
+import * as commonHelpers from "./helpers/common";
+import * as utils from "../src/utils";
 
 describe("Utils Module", () => {
 

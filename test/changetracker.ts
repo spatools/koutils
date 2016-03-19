@@ -1,11 +1,6 @@
-﻿/// <reference path="../_definitions.d.ts" />
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/should/should.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-
-import ko = require("knockout");
-import changeTracker = require("../src/changetracker");
-import commonHelpers = require("./helpers/common");
+﻿import * as ko from "knockout";
+import * as commonHelpers from "./helpers/common";
+import ChangeTracker = require("../src/changetracker");
 
 describe("ChangeTracker", () => {
 
@@ -13,7 +8,7 @@ describe("ChangeTracker", () => {
 
         it("should not detect changes when nothing change", () => {
             var note = commonHelpers.createNote(),
-                tracker = new changeTracker(note),
+                tracker = new ChangeTracker(note),
 
                 hasChanges = tracker.hasChanges();
 
@@ -22,7 +17,7 @@ describe("ChangeTracker", () => {
 
         it("should detect changes when something change", () => {
             var note = commonHelpers.createNote(),
-                tracker = new changeTracker(note),
+                tracker = new ChangeTracker(note),
 
                 hasChanges = tracker.hasChanges();
 
@@ -39,7 +34,7 @@ describe("ChangeTracker", () => {
 
         it("should reset tracker with current value", () => {
             var note = commonHelpers.createNote(),
-                tracker = new changeTracker(note),
+                tracker = new ChangeTracker(note),
 
                 hasChanges = tracker.hasChanges();
 
@@ -62,7 +57,7 @@ describe("ChangeTracker", () => {
 
         it("should detect changes immediately", () => {
             var note = commonHelpers.createNote(),
-                tracker = new changeTracker(note, true),
+                tracker = new ChangeTracker(note, true),
 
                 hasChanges = tracker.hasChanges();
 
@@ -71,7 +66,7 @@ describe("ChangeTracker", () => {
 
         it("should not detect changes anymore after a reset call", () => {
             var note = commonHelpers.createNote(),
-                tracker = new changeTracker(note, true),
+                tracker = new ChangeTracker(note, true),
 
                 hasChanges = tracker.hasChanges();
 
