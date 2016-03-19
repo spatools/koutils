@@ -10,6 +10,7 @@
         "config.ts",
         "extenders.ts",
         "observable.ts",
+        "purifier.ts",
         "utils.ts"
     ]
 }
