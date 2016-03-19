@@ -85,13 +85,15 @@ module.exports = function (grunt) {
         
         test: {
             singleRun: true,
-            browsers: ["PhantomJS"]
+            browsers: ["PhantomJS"],
+            reporters: ["mocha"]
         },
         
         server: {
             autoWatch: false,
             background: true,
             singleRun: false,
+            reporters: ["dots"],
             browsers: ["PhantomJS"],
             files: [
                 { src: "test/config.js" },
