@@ -5,6 +5,9 @@
     },
     "files": [
         "_references.d.ts",
+        "src/extenders/delay.ts",
+        "src/extenders/notify.ts",
+        "src/extenders/sync.ts",
         "src/observable/history.ts",
         "src/observable/simulated.ts",
         "src/observable/validated.ts",
