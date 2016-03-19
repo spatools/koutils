@@ -8,17 +8,15 @@
 *.sln
 *.*proj
 
-# Keep only ts file in src folder
-src/*.js
-src/*.js.map
-test/*.js
-test/*.js.map
-test/helpers/*.d.ts
-test/helpers/*.js
-test/helpers/*.js.map
-nuget/*.nupkg
+# Built files
+*.js
+*.js.map
+*.d.ts
+*.nupkg
+!**/_references.d.ts
 
 # Build results
+[Dd]ist/
 [Dd]ebug/
 [Rr]elease/
 x64/
