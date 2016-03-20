@@ -81,7 +81,8 @@ function shouldWait(obj: any): boolean {
     
     if (typeof obj === "object") {
         for (let key in obj) {
-            if (obj.hasOwnProperty(key) && ko.isComputed(obj[key]) && obj[key]._deferUpdates) {
+            if (obj.hasOwnProperty(key) && ko.isComputed(obj[key]) && 
+                obj[key].notifySubscribers !== ko.subscribable.fn.notifySubscribers) {
                 return true;
             }
         }

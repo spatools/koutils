@@ -5,6 +5,7 @@
     },
     "files": [
         "_references.d.ts",
+        "src/extenders/index.ts",
         "src/extenders/delay.ts",
         "src/extenders/notify.ts",
         "src/extenders/sync.ts",

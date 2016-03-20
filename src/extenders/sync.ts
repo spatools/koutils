@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 declare module "knockout" {
     export interface Extenders {
-        sync<T>(target: sync.Subscribable<T>): typeof target;
+        sync<T>(target: Subscribable<T>): typeof target;
     }
 }
 

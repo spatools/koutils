@@ -3,7 +3,17 @@ import { createSymbol } from "../utils";
 
 declare module "knockout" {
     export interface Extenders {
-        delay<T>(target: ko.Subscribable<T>, delay: number): delay.DelayedSubscribable<T, typeof target>;
+        delay<T>(target: ko.Subscribable<T>, delay: number): utils.DelayedSubscribable<T, typeof target>;
+    }
+    
+    export module utils {
+        export type DelayedSubscribable<T, U extends Subscribable<T>> = U & DelayedObservableExtension<T>;
+        export type DelayedObservable<T> = DelayedSubscribable<T, Observable<T>>;
+
+        export interface DelayedObservableExtension<T> {
+            immediate: Observable<T>;
+            dispose(): void;
+        } 
     }
 }
 
