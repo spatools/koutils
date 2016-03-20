@@ -222,6 +222,8 @@ module.exports = function (grunt) {
                 
                 grunt.verbose.writeln(result.stdout);
                 grunt.log.ok("NPM package " + config.pkg.version + " successfully published");
+                
+                done();
             }
         );
     });
