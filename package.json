@@ -17,6 +17,11 @@
     "knockoutjs",
     "ko",
     "changeTracker",
+    "purifier",
+    "history",
+    "dom",
+    "simulated",
+    "validation",
     "utilities",
     "javascript",
     "utils",
@@ -24,7 +29,11 @@
     "amd"
   ],
   "scripts": {
+    "postinstall": "typings install && bower install && cd test && typings install",
     "test": "grunt test"
+  },
+  "dependencies": {
+    "knockout": "^3.4.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
