@@ -1,6 +1,6 @@
 {
   "name": "koutils",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "homepage": "https://github.com/spatools/koutils",
   "license": "MIT",

@@ -190,7 +190,7 @@ module.exports = function (grunt) {
         dist: {
             options: {
                 dir: "<%= paths.build %>",
-                message: "Built release %sourceName% from commit %sourceCommit% on branch %sourceBranch%"
+                message: "Release v<%= pkg.version %>"
             }
         }
     };
@@ -198,6 +198,33 @@ module.exports = function (grunt) {
     //#endregion
     
     //#region Custom Tasks
+    
+    grunt.registerTask("npm-publish", function () {
+        var done = this.async();
+        
+        grunt.util.spawn(
+            {
+                cmd: "npm",
+                args: ["publish"],
+                opts: {
+                    cwd: config.paths.build
+                }
+            }, 
+            function(err, result, code) {
+                if (err) {
+                    grunt.log.error();
+                    grunt.fail.warn(err, code);
+                }
+                
+                if (code !== 0) {
+                    grunt.fail.warn(result.stderr || result.stdout, code);
+                }
+                
+                grunt.verbose.writeln(result.stdout);
+                grunt.log.ok("NPM package " + config.pkg.version + " successfully published");
+            }
+        );
+    });
     
     grunt.registerTask("assets", function () {
         copyPackage("package.json");
@@ -235,7 +262,7 @@ module.exports = function (grunt) {
     grunt.registerTask("test-watch", ["clean:test", "ts:test", "eslint:test", "karma:server:start", "watch"]);
     
     grunt.registerTask("nuget", ["nugetpack", "nugetpush"]);
-    grunt.registerTask("publish", ["build", "nuget", "buildcontrol:dist"]);
+    grunt.registerTask("publish", ["build", "nuget", "buildcontrol:dist", "npm-publish"]);
 
     grunt.registerTask("default", ["test", "build"]);
 };

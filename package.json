@@ -1,6 +1,6 @@
 {
   "name": "koutils",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "author": "SPA Tools",
   "license": "MIT",
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-build-control": "^0.6.3",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-eslint": "^18.0.0",

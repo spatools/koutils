@@ -1,4 +1,4 @@
-﻿# KoUtils [![Build Status](https://travis-ci.org/spatools/koutils.png)](https://travis-ci.org/spatools/koutils) [![Bower version](https://badge.fury.io/bo/koutils.png)](http://badge.fury.io/bo/koutils) [![NuGet version](https://badge.fury.io/nu/koutils.png)](http://badge.fury.io/nu/koutils)
+﻿# KoUtils [![Build Status](https://travis-ci.org/spatools/koutils.png)](https://travis-ci.org/spatools/koutils) [![Bower version](https://badge.fury.io/bo/koutils.png)](http://badge.fury.io/bo/koutils) [![NuGet version](https://badge.fury.io/nu/koutils.png)](http://badge.fury.io/nu/koutils) [![npm version](https://badge.fury.io/js/koutils.svg)](https://badge.fury.io/js/koutils)
 
 Knockout Utilities Extensions to simplify Knockout app development.
 
