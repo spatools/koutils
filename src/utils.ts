@@ -1,27 +1,7 @@
 import * as ko from "knockout";
 
-export interface Size {
-    width: number;
-    height: number;
-}
-
-export interface Point {
-    x: number;
-    y: number;
-}
-
-export interface Position {
-    top: number;
-    left: number;
-}
-
-export interface ObservablePosition {
-    top: ko.Observable<number>;
-    left: ko.Observable<number>;
-}
-
 export const isIE = /*@cc_on!@*/0;
-export const canUseSymbols = typeof Symbol === 'function';
+export const canUseSymbols = typeof Symbol === "function";
 
 //#region Knockout Utilities
 
@@ -124,41 +104,6 @@ export function inherits(obj: any, base: any, prototype: any): any {
     return obj;
 }
 
-/** Execute callback methods in a safe DOM modification environment. Usefull when creating HTML5 Application. */
-export function unsafe<T>(callback: () => T): T {
-    if (typeof MSApp === "undefined" || !MSApp.execUnsafeLocalFunction) {
-        return callback.call(null);
-    } else {
-        return MSApp.execUnsafeLocalFunction(callback);
-    }
-}
-
-/** Get current window size. */
-export function getWindowSize(): Size {
-    var winW: number = 630,
-        winH: number = 460;
-
-    if (document.body && document.body.offsetWidth) {
-        winW = document.body.offsetWidth;
-        winH = document.body.offsetHeight;
-    }
-
-    if (document.compatMode === "CSS1Compat" && document.documentElement && document.documentElement.offsetWidth) {
-        winW = document.documentElement.offsetWidth;
-        winH = document.documentElement.offsetHeight;
-    }
-
-    if (window.innerWidth && window.innerHeight) {
-        winW = window.innerWidth;
-        winH = window.innerHeight;
-    }
-
-    return {
-        width: winW,
-        height: winH
-    };
-}
-
 /** Check if node is in DOM */
 export function isNodeInDOM(node: Node): boolean {
     if (!node) {
@@ -173,24 +118,6 @@ export function isNodeInDOM(node: Node): boolean {
 
     // ancestor should be a document
     return !!(<Document>ancestor).body;
-}
-
-/** Get query strings. If a key is specified, returns only query string for specified key. */
-export function getQueryString(key: string): any {
-    var dictionary = {},
-        qs = window.location.search.replace("?", ""),
-        pairs = qs.split("&");
-
-    pairs.forEach(val => {
-        var pair = val.split("=");
-        dictionary[pair[0]] = pair[1];
-    });
-
-    if (key) {
-        return dictionary[key];
-    }
-
-    return dictionary;
 }
 
 //#endregion

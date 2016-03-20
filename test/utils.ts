@@ -278,24 +278,6 @@ describe("Utils Module", () => {
 
     });
 
-    describe("getWindowSize", () => {
-
-        it("should return a valid size with width and height typed as Number", () => {
-            var size = utils.getWindowSize();
-
-            size.width.should.be.a.Number;
-            size.height.should.be.a.Number;
-        });
-
-        it("should return a valid size with width and height >= 0", () => {
-            var size = utils.getWindowSize();
-
-            size.width.should.be.greaterThan(-1);
-            size.height.should.be.greaterThan(-1);
-        });
-
-    });
-
     describe("format", () => {
 
         it("should return a formatted string by replacing every {N} tag with given values", () => {
