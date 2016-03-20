@@ -14,6 +14,8 @@
 *.d.ts
 *.nupkg
 !**/_references.d.ts
+!Gruntfile.js
+!karma.conf.js
 
 # Build results
 [Dd]ist/

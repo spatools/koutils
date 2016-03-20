@@ -4,7 +4,7 @@
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "author": "SPA Tools",
   "license": "MIT",
-  "main": "dist/koutils.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/spatools/koutils.git"
@@ -19,7 +19,6 @@
     "changeTracker",
     "purifier",
     "history",
-    "dom",
     "simulated",
     "validation",
     "utilities",

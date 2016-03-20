@@ -103,27 +103,27 @@ obs("newValue");
 tracker.hasChanges(); // true
 ```
 
-### Browser (with built file)
-
-Include built script in your HTML file.
-
-```html
-<script type="text/javascript" src="path/to/knockout.js"></script>
-<script type="text/javascript" src="path/to/koutils.js"></script>
-```
-
-Then use the global `koutils` to access modules:
-
-```javascript
-var obs = ko.observable(),
-    tracker = new koutils.ChangeTracker(obs);
-
-tracker.hasChanges(); // false
-
-obs("newValue");
-
-tracker.hasChanges(); // true
-```
+[//] # (### Browser (with built file))
+[//] # ()
+[//] # (Include built script in your HTML file.)
+[//] # ()
+[//] # (```html)
+[//] # (<script type="text/javascript" src="path/to/knockout.js"></script>)
+[//] # (<script type="text/javascript" src="path/to/koutils.js"></script>)
+[//] # (```)
+[//] # ()
+[//] # (Then use the global `koutils` to access modules:)
+[//] # ()
+[//] # (```javascript)
+[//] # (var obs = ko.observable(),)
+[//] # (    tracker = new koutils.ChangeTracker(obs);)
+[//] # ()
+[//] # (tracker.hasChanges(); // false)
+[//] # ()
+[//] # (obs("newValue");)
+[//] # ()
+[//] # (tracker.hasChanges(); // true)
+[//] # (```)
 
 ## Documentation
 

@@ -4,7 +4,11 @@
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "homepage": "https://github.com/spatools/koutils",
   "license": "MIT",
-  "main": "dist/koutils.js",
+  "main": "index.js",
+  "moduleType": [
+      "amd",
+      "node"
+  ],
   "authors": [
     "SPA Tools"
   ],
@@ -13,6 +17,10 @@
     "knockoutjs",
     "ko",
     "changeTracker",
+    "purifier",
+    "history",
+    "simulated",
+    "validation",
     "utilities",
     "javascript",
     "utils",
