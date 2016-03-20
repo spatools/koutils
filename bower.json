@@ -1,0 +1,41 @@
+{
+  "name": "koutils",
+  "version": "2.0.0",
+  "description": "Knockout Utilities Extensions to simplify Knockout app development",
+  "homepage": "https://github.com/spatools/koutils",
+  "license": "MIT",
+  "main": "index.js",
+  "moduleType": [
+    "amd",
+    "node"
+  ],
+  "authors": [
+    "SPA Tools"
+  ],
+  "keywords": [
+    "knockout",
+    "knockoutjs",
+    "ko",
+    "changeTracker",
+    "purifier",
+    "history",
+    "simulated",
+    "validation",
+    "utilities",
+    "javascript",
+    "utils",
+    "spatools",
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "typings",
+    "nuget",
+    "test"
+  ],
+  "dependencies": {
+    "knockout": "^3.4.0"
+  }
+}
