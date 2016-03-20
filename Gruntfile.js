@@ -231,7 +231,10 @@ module.exports = function (grunt) {
     grunt.registerTask("assets", function () {
         copyPackage("package.json");
         copyPackage("bower.json");
-        
+
+        grunt.file.copy("README.md", config.paths.build + "/README.md");
+        grunt.log.ok(config.paths.build + "/README.Md created !");
+                
         writeDest(".gitignore", "node_modules/\nbower_components/");
     });
     
