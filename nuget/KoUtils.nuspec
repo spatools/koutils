@@ -16,26 +16,47 @@
       You can see release notes at :
       https://github.com/spatools/koutils
     </releaseNotes>
-    <copyright>Copyright 2014 - SPA Tools</copyright>
+    <copyright>Copyright 2016 - SPA Tools</copyright>
     <tags>
       Knockout,
       Utilities,
       ChangeTracker,
+      History,
+      Simulated,
+      Validation,
+      Purifier,
       Extension,
-      Moment,
-      AMD
+      AMD,
+      CommonJS
     </tags>
     <dependencies>
-      <dependency id="RequireJS" version="2.1.17" />
-      <dependency id="Knockout" version="3.3.0" />
+      <dependency id="Knockout" version="3.4.0" />
     </dependencies>
   </metadata>
   <files>
+    <file src="..\dist\extenders\delay.js" target="Content\Scripts\koutils\extenders" />
+    <file src="..\dist\extenders\delay.d.ts" target="Content\Scripts\koutils\extenders" />
+    <file src="..\dist\extenders\notify.js" target="Content\Scripts\koutils\extenders" />
+    <file src="..\dist\extenders\notify.d.ts" target="Content\Scripts\koutils\extenders" />
+    <file src="..\dist\extenders\sync.js" target="Content\Scripts\koutils\extenders" />
+    <file src="..\dist\extenders\sync.d.ts" target="Content\Scripts\koutils\extenders" />
+    <file src="..\dist\observable\history.js" target="Content\Scripts\koutils\observable" />
+    <file src="..\dist\observable\history.d.ts" target="Content\Scripts\koutils\observable" />
+    <file src="..\dist\observable\simulated.js" target="Content\Scripts\koutils\observable" />
+    <file src="..\dist\observable\simulated.d.ts" target="Content\Scripts\koutils\observable" />
+    <file src="..\dist\observable\validated.js" target="Content\Scripts\koutils\observable" />
+    <file src="..\dist\observable\validated.d.ts" target="Content\Scripts\koutils\observable" />
     <file src="..\dist\changetracker.js" target="Content\Scripts\koutils" />
+    <file src="..\dist\changetracker.d.ts" target="Content\Scripts\koutils" />
     <file src="..\dist\extenders.js" target="Content\Scripts\koutils" />
+    <file src="..\dist\extenders.d.ts" target="Content\Scripts\koutils" />
     <file src="..\dist\observable.js" target="Content\Scripts\koutils" />
+    <file src="..\dist\observable.d.ts" target="Content\Scripts\koutils" />
     <file src="..\dist\purifier.js" target="Content\Scripts\koutils" />
+    <file src="..\dist\purifier.d.ts" target="Content\Scripts\koutils" />
     <file src="..\dist\utils.js" target="Content\Scripts\koutils" />
-    <file src="..\dist\koutils.d.ts" target="Content\Scripts\koutils" />
+    <file src="..\dist\utils.d.ts" target="Content\Scripts\koutils" />
+    <file src="..\dist\index.js" target="Content\Scripts\koutils" />
+    <file src="..\dist\index.d.ts" target="Content\Scripts\koutils" />
   </files>
 </package>
