@@ -1,6 +1,4 @@
-﻿/// <reference path="./typings/browser.d.ts" />
-
-interface Function {
+﻿interface Function {
     result?: any; // Memoization Pattern
 }
 

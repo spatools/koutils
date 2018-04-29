@@ -1,21 +1,14 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "umd"
+        "module": "umd",
+        "moduleResolution": "node",
+        "sourceMap": false
     },
-    "files": [
-        "_references.d.ts",
-        "src/extenders/index.ts",
-        "src/extenders/delay.ts",
-        "src/extenders/notify.ts",
-        "src/extenders/sync.ts",
-        "src/observable/history.ts",
-        "src/observable/simulated.ts",
-        "src/observable/validated.ts",
-        "src/changetracker.ts",
-        "src/extenders.ts",
-        "src/observable.ts",
-        "src/purifier.ts",
-        "src/utils.ts"
+    "exclude": [
+        "test",
+        "node_modules",
+        "nuget",
+        "dist"
     ]
 }

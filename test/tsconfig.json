@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "amd"
+        "module": "amd",
+        "moduleResolution": "node"
     },
     "files": [
         "_references.d.ts",

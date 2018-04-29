@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Sat Mar 19 2016 11:22:22 GMT+0100 (Paris, Madrid)
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -10,13 +10,15 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ["mocha", "should", "sinon", "requirejs"],
+    frameworks: ["mocha", "requirejs"],
 
 
     // list of files / patterns to load in the browser
     files: [
       "test/config.js",
-      { pattern: "bower_components/**/*.js", included: false },
+      { pattern: "node_modules/knockout/**/*.js", included: false },
+      { pattern: "node_modules/sinon/**/*.js", included: false },
+      { pattern: "node_modules/should/**/*.js", included: false },
       { pattern: "src/**/*.js", included: false },
       { pattern: "src/**/*.ts", included: false, watched: false, nocache: true },
       { pattern: "src/**/*.js.map", included: false, watched: false, nocache: true },
