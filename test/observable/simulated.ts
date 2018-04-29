@@ -1,3 +1,5 @@
+import "should";
+
 import * as simulatedObservable from "../../src/observable/simulated";
 import { isNodeInDOM } from "../../src/utils";
 import * as ko from "knockout";
@@ -36,7 +38,7 @@ describe("observable/simulated", () => {
 
     it("should accept a owner argument which is bound to getter functiton", () => {
         const self = {};
-        simu = simulatedObservable(div, function() { self.should.equal(this); }, self);
+        simu = simulatedObservable(div, function () { self.should.equal(this); }, self);
     });
 
     it("should evaluate getter function immediately", () => {

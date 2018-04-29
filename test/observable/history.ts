@@ -1,3 +1,5 @@
+import * as should from "should";
+
 import * as historyObservable from "../../src/observable/history";
 import * as ko from "knockout";
 

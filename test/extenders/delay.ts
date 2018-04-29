@@ -1,13 +1,15 @@
+import * as should from "should";
+
 import * as delayExtender from "../../src/extenders/delay";
 import * as ko from "knockout";
 
 describe("extenders/delay", () => {
-    let sub: ko.subscription<any>;
-    afterEach(() => { 
+    let sub: ko.Subscription;
+    afterEach(() => {
         if (sub) {
             sub.dispose();
             sub = null;
-        } 
+        }
     });
 
     describe("delay", () => {
@@ -38,17 +40,17 @@ describe("extenders/delay", () => {
 
                 obs().should.equal("test");
             });
-            
+
             it("should set value after given duration", (done) => {
                 const obs = ko.observable("test").extend({ delay: 10 }) as delayExtender.DelayedObservable<string>;
                 obs.immediate("test 2");
-                
+
                 setTimeout(() => {
                     obs().should.equal("test 2");
                     done();
                 }, 15);
             });
-            
+
         });
 
         describe("when dispose is called", () => {
@@ -56,15 +58,15 @@ describe("extenders/delay", () => {
             it("should release every extensions applied by extender", () => {
                 const obs = ko.observable("test").extend({ delay: 10 }) as delayExtender.DelayedObservable<string>;
                 obs.dispose();
-                
+
                 should(obs.immediate).be.empty;
                 should(obs.dispose).be.empty;
             });
-            
+
             it("should stop immediately value propagation", (done) => {
                 const obs = ko.observable("test").extend({ delay: 10 }) as delayExtender.DelayedObservable<string>;
                 obs.immediate("test 2");
-                
+
                 setTimeout(() => {
                     obs().should.equal("test");
                     done();
@@ -72,7 +74,7 @@ describe("extenders/delay", () => {
 
                 obs.dispose();
             });
-            
+
         });
 
     });

@@ -1,4 +1,6 @@
-﻿import * as ko from "knockout";
+﻿import "should";
+
+import * as ko from "knockout";
 import * as commonHelpers from "./helpers/common";
 import * as utils from "../src/utils";
 
@@ -264,7 +266,7 @@ describe("Utils Module", () => {
                         return "do2";
                     }
                 }
-                );
+            );
 
             var test = new TestType();
 

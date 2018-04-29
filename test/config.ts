@@ -7,12 +7,14 @@ require.config({
     baseUrl: "/base",
 
     paths: {
-        "knockout": "bower_components/knockout/dist/knockout.debug"
+        "knockout": "node_modules/knockout/build/output/knockout-latest.debug",
+        "should": "node_modules/should/should",
+        "sinon": "node_modules/sinon/pkg/sinon"
     },
 
     deps: Object.keys(__karma__.files)
-            .filter(file => TEST_REGEXP.test(file) && file.indexOf("config") === -1 && file.indexOf("helpers") === -1)
-            .map(file => file.replace(REPLACE_REGEXP, "")),
-    
+        .filter(file => TEST_REGEXP.test(file) && file.indexOf("config") === -1 && file.indexOf("helpers") === -1)
+        .map(file => file.replace(REPLACE_REGEXP, "")),
+
     callback: __karma__.start
 });

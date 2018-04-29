@@ -1,9 +1,11 @@
+import "should";
+
 import * as extenders from "../src/extenders";
 import * as ko from "knockout";
 import * as sinon from "sinon";
 
 describe("extenders", () => {
-    
+
     ["delay", "notify", "sync"].forEach(extType => {
         describe(extType, () => {
 

@@ -1,4 +1,6 @@
-﻿import * as ko from "knockout";
+﻿import "should";
+
+import * as ko from "knockout";
 import * as commonHelpers from "./helpers/common";
 import ChangeTracker = require("../src/changetracker");
 

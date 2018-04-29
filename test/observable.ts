@@ -1,3 +1,5 @@
+import "should";
+
 import * as observable from "../src/observable";
 
 describe("observable", () => {
