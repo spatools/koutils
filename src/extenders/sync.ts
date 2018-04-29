@@ -4,6 +4,10 @@ declare module "knockout" {
     export interface Extenders {
         sync<T>(target: Subscribable<T>): typeof target;
     }
+
+    export interface ObservableExtenderOptions {
+        sync?: boolean;
+    }
 }
 
 ko.extenders.sync = sync;

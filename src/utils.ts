@@ -17,7 +17,7 @@ export function createObservable<T>(value: any, _default?: T): ko.Observable<T> 
     }
 
     if (ko.isSubscribable(value)) {
-        return value;
+        return value as any;
     }
 
     return ko.observable(value);
@@ -30,7 +30,7 @@ export function createObservableArray(value: any, mapFunction?: (obj: any) => an
     }
 
     if (ko.isSubscribable(value) && Array.isArray(value())) {
-        return value;
+        return value as any;
     }
 
     if (Array.isArray(value) && is(mapFunction, "function")) {
@@ -54,13 +54,13 @@ export function is(obj: any, type: string): boolean {
 }
 /** Test if value is of one of the specified types. */
 export function isOf(obj: any, ...types: string[]): boolean {
-    var objType = typeof obj;
+    const objType = typeof obj;
     return types.some(t => t === objType);
 }
 
 /** Test if value is an object. */
 export function isObject(obj: any): boolean {
-    var objType = typeof obj;
+    const objType = typeof obj;
     return objType === "function" || objType === "object" && !!obj;
 }
 
@@ -109,9 +109,8 @@ export function isNodeInDOM(node: Node): boolean {
     if (!node) {
         return false;
     }
-    
-    var ancestor = node;
 
+    let ancestor = node;
     while (ancestor.parentNode) {
         ancestor = ancestor.parentNode;
     }
@@ -127,9 +126,10 @@ export function isNodeInDOM(node: Node): boolean {
 /** Format text by using a format template */
 export function format(text: string, ...args: any[]): string {
     return text.replace(/\{+-?[0-9]+(:[^}]+)?\}+/g, tag => {
-        var match = tag.match(/(\{+)(-?[0-9]+)(:([^\}]+))?(\}+)/),
-            index = parseInt(match[2], 10),
-            value = args[index];
+        const
+            match = tag.match(/(\{+)(-?[0-9]+)(:([^}]+))?(}+)/),
+            index = parseInt(match[2], 10);
+        let value = args[index];
 
         if (match[1].length > 1 && match[5].length > 1) {
             return "{" + index + (match[3] || "") + "}";
@@ -159,7 +159,7 @@ export function format(text: string, ...args: any[]): string {
 
 /** Fill given text with given char while text length < given length */
 export function str_pad(text: string, length: number, char: string, right: boolean = false): string {
-    var str: string = "" + text;
+    let str: string = "" + text;
     while (str.length < length) {
         str = right ? str + char : char + str;
     }
@@ -183,7 +183,8 @@ export interface ArrayComparison {
 export function arrayDiff(array: any[], ...others: any[]): any[] {
     array = array || [];
 
-    var tmp = [],
+    const
+        tmp = [],
         rest = tmp.concat.apply(tmp, others);
 
     return array.filter(item => rest.indexOf(item) === -1);
@@ -197,7 +198,7 @@ export function arrayCompare(array1: any[], array2: any[]): ArrayComparison {
 }
 
 export function arrayEquals(array1: any[], array2: any[]): boolean {
-    var report = arrayCompare(array1, array2);
+    const report = arrayCompare(array1, array2);
     return report.added.length === 0 && report.removed.length === 0;
 }
 
