@@ -1,8 +1,9 @@
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports", "knockout"], factory);
     }
 })(function (require, exports) {
@@ -10,7 +11,7 @@
     var ko = require("knockout");
     ko.extenders.notify = notify;
     function notify(target, notifyWhen) {
-        if (typeof notifyWhen === "function") {
+        if (typeof notifyWhen === "function") { // custom
             target.equalityComparer = notifyWhen;
             return target;
         }

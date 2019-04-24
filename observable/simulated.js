@@ -1,9 +1,10 @@
 /*eslint no-unused-vars: [0], no-redeclare: [0] */
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports", "knockout", "../utils"], factory);
     }
 })(function (require, exports) {
@@ -14,7 +15,6 @@
         var item = simulated.add(element, owner ? getter.bind(owner) : getter);
         return item.observable;
     }
-    var simulated;
     (function (simulated) {
         var timer = null, items = [];
         function add(element, getter) {
@@ -43,7 +43,7 @@
         simulated.add = add;
         function check() {
             items = items.filter(function (item) { return utils_1.isNodeInDOM(item.element); });
-            if (items.length === 0) {
+            if (items.length === 0 && timer) {
                 clearInterval(timer);
                 timer = null;
                 return;

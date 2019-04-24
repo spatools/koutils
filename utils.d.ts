@@ -1,10 +1,11 @@
 import * as ko from "knockout";
-export declare const isIE: number;
+export declare const isIE = 0;
 export declare const canUseSymbols: boolean;
 /** Create value accessor for custom bindings. */
 export declare function createAccessor<T>(value: T): () => T;
 /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
-export declare function createObservable<T>(value: any, _default?: T): ko.Observable<T>;
+export declare function createObservable<T>(value: any, _default: T): ko.Observable<T>;
+export declare function createObservable<T>(value: any, _default?: T): ko.Observable<T | undefined>;
 /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
 export declare function createObservableArray(value: any, mapFunction?: (obj: any) => any, context?: any): ko.ObservableArray<any>;
 export declare function createSymbol(identifier: string): symbol | string;

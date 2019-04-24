@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 declare class ChangeTracker {
     private hashFunction;
-    private params;
+    private params?;
     private tracked;
     private shouldWait;
     private lastData;
@@ -12,7 +12,7 @@ declare class ChangeTracker {
     forceChange(): void;
     reset(): void;
     dispose(): void;
-    private getHash();
-    private setLastData();
+    private getHash;
+    private setLastData;
 }
 export = ChangeTracker;

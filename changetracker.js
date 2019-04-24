@@ -1,14 +1,15 @@
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports", "knockout"], factory);
     }
 })(function (require, exports) {
     "use strict";
     var ko = require("knockout");
-    var ChangeTracker = (function () {
+    var ChangeTracker = /** @class */ (function () {
         function ChangeTracker(object, isAlreadyModified, hashFunction, params) {
             if (isAlreadyModified === void 0) { isAlreadyModified = false; }
             if (hashFunction === void 0) { hashFunction = ko.toJSON; }
@@ -33,12 +34,10 @@
         };
         ChangeTracker.prototype.dispose = function () {
             this.hasChanges.dispose();
-            this.hasChanges = null;
             this.lastData(null);
             this.isModified(false);
             this.tracked = null;
             this.params = null;
-            this.hashFunction = null;
         };
         ChangeTracker.prototype.getHash = function () {
             return this.hashFunction(this.tracked, this.params);

@@ -1,6 +1,6 @@
 {
   "name": "koutils",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "author": "SPA Tools",
   "license": "MIT",
@@ -28,12 +28,12 @@
     "amd"
   ],
   "dependencies": {
-    "knockout": "^3.4.0"
+    "knockout": "^3.5.0"
   },
   "optionalDependencies": {
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-firefox-launcher": "^0.1.7",
-    "karma-ie-launcher": "^0.2.0",
-    "karma-opera-launcher": "^0.3.0"
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-opera-launcher": "^1.0.0"
   }
 }

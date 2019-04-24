@@ -8,7 +8,7 @@ declare module simulated {
         dispose(): void;
     }
     interface SimulatedObservable<T> extends ko.Observable<T> {
-        dispose(): any;
+        dispose(): void;
     }
     function add<T>(element: Element, getter: (element: Element) => T): SimulatedItems<T>;
 }

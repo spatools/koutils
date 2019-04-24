@@ -1,18 +1,21 @@
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports", "knockout"], factory);
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var ko = require("knockout");
     function noop() {
         return true;
     }
     function purify(pureComputed, evaluator, owner) {
-        var internalComputed = ko.pureComputed(evaluator, owner), disposable;
+        var internalComputed = ko.pureComputed(evaluator, owner);
+        var disposable;
         function wake() {
             if (!disposable) {
                 disposable = internalComputed.subscribe(noop);
@@ -35,10 +38,11 @@
     exports.purify = purify;
     function unpromise(evaluator, options) {
         options = options || {};
-        var latestValue = ko.observable(options.initialValue), errorValue = options.errorValue || options.initialValue, owner = options.owner, waitingOn = 0, pureComputed = ko.pureComputed(latestValue);
+        var latestValue = ko.observable(options.initialValue), errorValue = options.errorValue || options.initialValue, owner = options.owner, pureComputed = ko.pureComputed(latestValue);
+        var waitingOn = 0;
         purify(pureComputed, function () {
             var prom = evaluator.call(owner), current = ++waitingOn;
-            if (prom.then) {
+            if (isPromiseLike(prom)) {
                 prom.then(function (res) {
                     if (current === waitingOn) {
                         latestValue(res);
@@ -66,4 +70,7 @@
         }
     };
     ko.virtualElements.allowedBindings.purify = true;
+    function isPromiseLike(p) {
+        return typeof p.then === "function";
+    }
 });

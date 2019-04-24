@@ -1,12 +1,14 @@
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports", "knockout"], factory);
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var ko = require("knockout");
     exports.isIE = 0;
     exports.canUseSymbols = typeof Symbol === "function";
@@ -16,7 +18,6 @@
         return function () { return value; };
     }
     exports.createAccessor = createAccessor;
-    /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
     function createObservable(value, _default) {
         if (isNullOrUndefined(value)) {
             return ko.observable(_default);
@@ -35,7 +36,7 @@
         if (ko.isSubscribable(value) && Array.isArray(value())) {
             return value;
         }
-        if (Array.isArray(value) && is(mapFunction, "function")) {
+        if (Array.isArray(value) && typeof mapFunction === "function") {
             value = value.map(mapFunction, context);
         }
         return ko.observableArray(value);
@@ -127,7 +128,11 @@
             args[_i - 1] = arguments[_i];
         }
         return text.replace(/\{+-?[0-9]+(:[^}]+)?\}+/g, function (tag) {
-            var match = tag.match(/(\{+)(-?[0-9]+)(:([^\}]+))?(\}+)/), index = parseInt(match[2], 10), value = args[index];
+            var match = tag.match(/(\{+)(-?[0-9]+)(:([^}]+))?(}+)/);
+            if (!match)
+                return tag;
+            var index = parseInt(match[2], 10);
+            var value = args[index];
             if (match[1].length > 1 && match[5].length > 1) {
                 return "{" + index + (match[3] || "") + "}";
             }

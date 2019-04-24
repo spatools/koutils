@@ -11,6 +11,9 @@ declare module "knockout" {
             dispose(): void;
         }
     }
+    interface ObservableExtenderOptions {
+        delay?: number;
+    }
 }
 declare function delay<T>(target: ko.Subscribable<T>, delay: number): delay.DelayedSubscribable<T, typeof target>;
 declare module delay {

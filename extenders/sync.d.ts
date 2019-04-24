@@ -3,6 +3,9 @@ declare module "knockout" {
     interface Extenders {
         sync<T>(target: Subscribable<T>): typeof target;
     }
+    interface ObservableExtenderOptions {
+        sync?: boolean;
+    }
 }
 declare function sync<T>(target: sync.Subscribable<T>): typeof target;
 declare module sync {

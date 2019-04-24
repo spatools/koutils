@@ -12,10 +12,10 @@ declare module history {
         reset(value?: T): void;
     }
     module fn {
-        function back(): any;
-        function next(): any;
-        function replace(value: any): void;
-        function reset(value?: any): void;
+        function back(this: history.HistoryObservable<any>): any;
+        function next(this: history.HistoryObservable<any>): any;
+        function replace(this: history.HistoryObservable<any>, value: any): void;
+        function reset(this: history.HistoryObservable<any>, value?: any): void;
     }
 }
 export = history;
