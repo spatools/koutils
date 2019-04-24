@@ -1,6 +1,6 @@
 {
   "name": "koutils",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Knockout Utilities Extensions to simplify Knockout app development",
   "author": "SPA Tools",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "knockout": "^3.5.0-rc"
+    "knockout": "^3.5.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.0",
@@ -59,7 +59,7 @@
     "should": "^13.2.1",
     "sinon": "^4.5.0",
     "time-grunt": "^1.4.0",
-    "typescript": "^2.8.3"
+    "typescript": "^3.4.5"
   },
   "optionalDependencies": {
     "karma-chrome-launcher": "^2.2.0",

@@ -1,13 +1,13 @@
 import * as ko from "knockout";
 
-ko.extenders.notify = notify;
+ko.extenders.notify = notify as any;
 
 function notify<T>(target: notify.ObservableOrComputed<T>, notifyWhen: string | ((a: T, b: T) => boolean)): typeof target {
     if (typeof notifyWhen === "function") { // custom
         target.equalityComparer = notifyWhen;
         return target;
     }
-    
+
     switch (notifyWhen) {
         case "always":
             target.equalityComparer = () => false;
@@ -16,7 +16,7 @@ function notify<T>(target: notify.ObservableOrComputed<T>, notifyWhen: string | 
             target.equalityComparer = () => true;
             break;
         case "reference":
-            target.equalityComparer = (a, b) => a === b;
+            target.equalityComparer = (a: T, b: T) => a === b;
             break;
         default:
             //case "primitive":

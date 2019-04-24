@@ -1,20 +1,5 @@
 ﻿import * as ko from "knockout";
 
-export interface Thenable<T> {
-    then<U>(onResolve: (result: T) => Thenable<U>);
-    then<U>(onResolve: (result: T) => U);
-
-    then<U>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => Thenable<U>);
-    then<U>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => U);
-    then<U>(onResolve: (result: T) => U, onReject: (error: Error) => Thenable<U>);
-    then<U>(onResolve: (result: T) => U, onReject: (error: Error) => U);
-
-    then<U, V>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => Thenable<V>);
-    then<U, V>(onResolve: (result: T) => Thenable<U>, onReject: (error: Error) => V);
-    then<U, V>(onResolve: (result: T) => U, onReject: (error: Error) => Thenable<V>);
-    then<U, V>(onResolve: (result: T) => U, onReject: (error: Error) => V);
-}
-
 export interface UnpromiseOptions<T> {
     initialValue?: T;
     errorValue?: T | any;
@@ -25,7 +10,7 @@ declare module "knockout" {
     export interface BindingHandlers {
         purify: {
             init(): BindingHandlerControlsDescendant;
-            update(element: Node, valueAccessor: () => any);
+            update(element: Node, valueAccessor: () => any): void;
         }
     }
 
@@ -42,7 +27,7 @@ export function purify<T, U>(pureComputed: ko.PureComputed<T>, evaluator: () => 
 export function purify<T, U>(pureComputed: ko.PureComputed<T>, evaluator: () => U, owner: any): ko.PureComputed<U>;
 export function purify<T, U>(pureComputed: ko.PureComputed<T>, evaluator: () => U, owner?: any): ko.PureComputed<U> {
     const internalComputed = ko.pureComputed(evaluator, owner);
-    let disposable;
+    let disposable: ko.Subscription | null;
 
     function wake() {
         if (!disposable) {
@@ -67,11 +52,12 @@ export function purify<T, U>(pureComputed: ko.PureComputed<T>, evaluator: () => 
     return internalComputed;
 }
 
-export function unpromise(evaluator: () => any | PromiseLike<any> | Thenable<any>): ko.PureComputed<any>;
-export function unpromise(evaluator: () => any | PromiseLike<any> | Thenable<any>, options: UnpromiseOptions<any>): ko.PureComputed<any>;
-export function unpromise<T>(evaluator: () => T | PromiseLike<T> | Thenable<T>): ko.PureComputed<T>
-export function unpromise<T>(evaluator: () => T | PromiseLike<T> | Thenable<T>, options: UnpromiseOptions<T>): ko.PureComputed<T>
-export function unpromise<T>(evaluator: () => T | PromiseLike<T> | Thenable<T>, options?: UnpromiseOptions<T>): ko.PureComputed<T> {
+export function unpromise(evaluator: () => any | PromiseLike<any>): ko.PureComputed<any>;
+export function unpromise(evaluator: () => any | PromiseLike<any>, options: UnpromiseOptions<any>): ko.PureComputed<any>;
+export function unpromise<T>(evaluator: () => T | PromiseLike<T>): ko.PureComputed<T | undefined>;
+export function unpromise<T>(evaluator: () => T | PromiseLike<T>, options: UnpromiseOptions<T> & { latestValue: T }): ko.PureComputed<T>;
+export function unpromise<T>(evaluator: () => T | PromiseLike<T>, options: UnpromiseOptions<T>): ko.PureComputed<T | undefined>;
+export function unpromise<T>(evaluator: () => T | PromiseLike<T>, options?: UnpromiseOptions<T>): ko.PureComputed<T | undefined> {
     options = options || {};
 
     const
@@ -79,7 +65,7 @@ export function unpromise<T>(evaluator: () => T | PromiseLike<T> | Thenable<T>, 
         errorValue = options.errorValue || options.initialValue,
         owner = options.owner,
 
-        pureComputed = ko.pureComputed<T>(latestValue);
+        pureComputed = ko.pureComputed<T | undefined>(latestValue);
 
     let waitingOn = 0;
 
@@ -87,7 +73,7 @@ export function unpromise<T>(evaluator: () => T | PromiseLike<T> | Thenable<T>, 
         var prom = evaluator.call(owner),
             current = ++waitingOn;
 
-        if (prom.then) {
+        if (isPromiseLike(prom)) {
             prom.then(
                 res => {
                     if (current === waitingOn) {
@@ -119,3 +105,7 @@ ko.bindingHandlers.purify = {
 };
 
 ko.virtualElements.allowedBindings.purify = true;
+
+function isPromiseLike(p: any): p is PromiseLike<any> {
+    return typeof p.then === "function";
+}

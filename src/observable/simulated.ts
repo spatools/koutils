@@ -9,11 +9,11 @@ function simulated<T>(element: Element, getter: (element: Element) => T, owner?:
 }
 
 module simulated {
-    let 
-        timer = null,
+    let
+        timer = null as number | null,
         items: SimulatedItems<any>[] = [];
 
-   export interface SimulatedItems<T> {
+    export interface SimulatedItems<T> {
         observable: SimulatedObservable<T>;
         getter: (element: Element) => T;
         element: Element;
@@ -21,42 +21,42 @@ module simulated {
     }
 
     export interface SimulatedObservable<T> extends ko.Observable<T> {
-        dispose();
+        dispose(): void;
     }
 
     export function add<T>(element: Element, getter: (element: Element) => T): SimulatedItems<T> {
-        const item = { 
-            observable: ko.observable(getter(element)) as SimulatedObservable<T>, 
+        const item = {
+            observable: ko.observable(getter(element)) as SimulatedObservable<T>,
             getter, element, dispose
         };
-        
+
         item.observable.dispose = item.dispose.bind(item);
-        
+
         items.push(item);
 
         if (timer === null) {
             timer = setInterval(check, 100);
         }
-        
+
         return item;
-        
-        function dispose() {
+
+        function dispose(this: SimulatedItems<any>) {
             const i = items.indexOf(this);
             if (i === -1) { return; }
-            
+
             items.splice(i, 1);
-                
+
             if (timer !== null && items.length === 0) {
                 clearInterval(timer);
                 timer = null;
             }
         }
     }
-    
+
     function check() {
         items = items.filter(item => isNodeInDOM(item.element));
 
-        if (items.length === 0) {
+        if (items.length === 0 && timer) {
             clearInterval(timer);
             timer = null;
             return;

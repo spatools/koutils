@@ -3,7 +3,7 @@ import * as ko from "knockout";
 class ChangeTracker {
     private tracked: any;
     private shouldWait: boolean;
-    private lastData: ko.Observable<string>;
+    private lastData: ko.Observable<string | null | undefined>;
     private isModified: ko.Observable<boolean>;
     private isWaiting: ko.Observable<boolean>;
 
@@ -15,17 +15,17 @@ class ChangeTracker {
         private hashFunction: (obj: any, params?: any) => string = ko.toJSON,
         private params?: any
     ) {
-            this.tracked = object;
-            this.lastData = ko.observable<string>();
-            this.isModified = ko.observable(isAlreadyModified);
+        this.tracked = object;
+        this.lastData = ko.observable<string>();
+        this.isModified = ko.observable(isAlreadyModified);
 
-            this.shouldWait = shouldWait(object);
-            this.isWaiting = ko.observable(this.shouldWait);
-            this.setLastData();
+        this.shouldWait = shouldWait(object);
+        this.isWaiting = ko.observable(this.shouldWait);
+        this.setLastData();
 
-            this.hasChanges = ko.computed<boolean>(function () {
-                return this.isModified() || (!this.isWaiting() && this.getHash() !== this.lastData());
-            }, this);
+        this.hasChanges = ko.computed<boolean>(function () {
+            return this.isModified() || (!this.isWaiting() && this.getHash() !== this.lastData());
+        }, this);
     }
 
     public forceChange() {
@@ -39,14 +39,12 @@ class ChangeTracker {
 
     public dispose() {
         this.hasChanges.dispose();
-        this.hasChanges = null;
 
         this.lastData(null);
         this.isModified(false);
 
         this.tracked = null;
         this.params = null;
-        this.hashFunction = null;
     }
 
     private getHash() {
@@ -74,19 +72,19 @@ function shouldWait(obj: any): boolean {
     if (!ko.tasks) {
         return false;
     }
-    
+
     if (ko.options && ko.options.deferUpdates) {
         return true;
     }
-    
+
     if (typeof obj === "object") {
         for (let key in obj) {
-            if (obj.hasOwnProperty(key) && ko.isComputed(obj[key]) && 
+            if (obj.hasOwnProperty(key) && ko.isComputed(obj[key]) &&
                 obj[key].notifySubscribers !== ko.subscribable.fn.notifySubscribers) {
                 return true;
             }
         }
     }
-    
+
     return false;
 }

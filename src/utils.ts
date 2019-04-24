@@ -11,7 +11,9 @@ export function createAccessor<T>(value: T): () => T {
 }
 
 /** Return an observable from value (or _default if undefined). If value is subscribable, returns value directly. */
-export function createObservable<T>(value: any, _default?: T): ko.Observable<T> {
+export function createObservable<T>(value: any, _default: T): ko.Observable<T>;
+export function createObservable<T>(value: any, _default?: T): ko.Observable<T | undefined>;
+export function createObservable<T>(value: any, _default?: T): ko.Observable<T | undefined> {
     if (isNullOrUndefined(value)) {
         return ko.observable(_default);
     }
@@ -33,7 +35,7 @@ export function createObservableArray(value: any, mapFunction?: (obj: any) => an
         return value as any;
     }
 
-    if (Array.isArray(value) && is(mapFunction, "function")) {
+    if (Array.isArray(value) && typeof mapFunction === "function") {
         value = value.map(mapFunction, context);
     }
 
@@ -126,9 +128,10 @@ export function isNodeInDOM(node: Node): boolean {
 /** Format text by using a format template */
 export function format(text: string, ...args: any[]): string {
     return text.replace(/\{+-?[0-9]+(:[^}]+)?\}+/g, tag => {
-        const
-            match = tag.match(/(\{+)(-?[0-9]+)(:([^}]+))?(}+)/),
-            index = parseInt(match[2], 10);
+        const match = tag.match(/(\{+)(-?[0-9]+)(:([^}]+))?(}+)/);
+        if (!match) return tag;
+
+        const index = parseInt(match[2], 10);
         let value = args[index];
 
         if (match[1].length > 1 && match[5].length > 1) {
@@ -184,7 +187,7 @@ export function arrayDiff(array: any[], ...others: any[]): any[] {
     array = array || [];
 
     const
-        tmp = [],
+        tmp = [] as any[],
         rest = tmp.concat.apply(tmp, others);
 
     return array.filter(item => rest.indexOf(item) === -1);

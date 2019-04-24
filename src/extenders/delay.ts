@@ -29,10 +29,10 @@ function delay<T>(target: ko.Subscribable<T>, delay: number): delay.DelayedSubsc
         subsProp = createSymbol("subs"),
         disposeProp = createSymbol("oldDispose"),
         t = target as typeof target & delay.DelayedObservableExtension<T>,
-        subs = [];
+        subs = [] as { dispose: Function }[];
 
-    t[subsProp] = subs;
-    t[disposeProp] = t.dispose;
+    (<any>t)[subsProp] = subs;
+    (<any>t)[disposeProp] = t.dispose;
 
     t.immediate = ko.observable(target());
     t.dispose = dispose;
@@ -44,11 +44,11 @@ function delay<T>(target: ko.Subscribable<T>, delay: number): delay.DelayedSubsc
 
     function onImmediateChanged(newValue: T) {
         if (newValue !== t()) {
-            if (t[timerProp]) {
-                clearTimeout(t[timerProp]);
+            if ((<any>t)[timerProp]) {
+                clearTimeout((<any>t)[timerProp]);
             }
 
-            t[timerProp] = setTimeout(() => target(newValue), delay);
+            (<any>t)[timerProp] = setTimeout(() => target(newValue), delay);
         }
     }
 
@@ -57,20 +57,20 @@ function delay<T>(target: ko.Subscribable<T>, delay: number): delay.DelayedSubsc
             delete t.immediate;
         }
 
-        if (t[timerProp]) {
-            clearTimeout(t[timerProp]);
-            delete t[timerProp];
+        if ((<any>t)[timerProp]) {
+            clearTimeout((<any>t)[timerProp]);
+            delete (<any>t)[timerProp];
         }
 
-        if (t[subsProp]) {
-            t[subsProp].forEach(sub => { sub.dispose(); });
-            delete t[subsProp];
+        if ((<any>t)[subsProp]) {
+            (<any>t)[subsProp].forEach((sub: ko.Subscription) => { sub.dispose(); });
+            delete (<any>t)[subsProp];
         }
 
-        if (t[disposeProp]) {
-            t[disposeProp].call(t);
-            t.dispose = t[disposeProp];
-            delete t[disposeProp];
+        if ((<any>t)[disposeProp]) {
+            (<any>t)[disposeProp].call(t);
+            t.dispose = (<any>t)[disposeProp];
+            delete (<any>t)[disposeProp];
         }
         else {
             delete t.dispose;

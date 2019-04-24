@@ -8,7 +8,7 @@ function history<T>(initialValue?: T): history.HistoryObservable<T> {
         selectedIndex: ko.observable(0),
         canGoBack: ko.pureComputed(() => self.selectedIndex() > 0),
         canGoNext: ko.pureComputed(() => self.selectedIndex() < self.latestValues().length - 1)
-    };
+    } as any;
 
     ko.utils.extend(self, history.fn);
 
@@ -40,9 +40,9 @@ function history<T>(initialValue?: T): history.HistoryObservable<T> {
     }).extend({ notify: "reference" });
 
     ko.utils.extend(result, self);
-    
+
     const oldDispose = result.dispose;
-    result.dispose = function() {
+    result.dispose = function () {
         oldDispose.call(this);
         this.canGoBack.dispose();
         this.canGoNext.dispose();
@@ -52,14 +52,14 @@ function history<T>(initialValue?: T): history.HistoryObservable<T> {
 }
 
 module history {
-        
+
     export interface HistoryObservable<T> extends ko.PureComputed<T> {
         latestValues: ko.ObservableArray<T>;
         selectedIndex: ko.Observable<number>;
 
         canGoBack: ko.PureComputed<boolean>;
         canGoNext: ko.PureComputed<boolean>;
-        
+
         back(): T;
         next(): T;
         replace(value: T): void;
@@ -67,31 +67,31 @@ module history {
     }
 
     export module fn {
-        export function back() {
+        export function back(this: history.HistoryObservable<any>) {
             if (this.canGoBack()) {
                 this.selectedIndex(this.selectedIndex() - 1);
             }
 
             return this();
         }
-        
-        export function next() {
+
+        export function next(this: history.HistoryObservable<any>) {
             if (this.canGoNext()) {
                 this.selectedIndex(this.selectedIndex() + 1);
             }
 
             return this();
         }
-        
-        export function replace(value: any): void {
+
+        export function replace(this: history.HistoryObservable<any>, value: any): void {
             const index = this.selectedIndex();
 
             this.latestValues.valueWillMutate();
             this.latestValues()[index] = value;
             this.latestValues.valueHasMutated();
         }
-        
-        export function reset(value: any = this()): void {
+
+        export function reset(this: history.HistoryObservable<any>, value: any = this()): void {
             const values = this.latestValues();
             this.latestValues.splice(0, values.length, value);
 
